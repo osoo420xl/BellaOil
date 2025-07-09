@@ -170,26 +170,6 @@ const App = () => {
 };
 
 const LandingPage = ({ navigateTo, scrollY }) => {
-  const [isVisible, setIsVisible] = useState({});
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(prev => ({ ...prev, [entry.target.id]: true }));
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const sections = document.querySelectorAll('.animate-on-scroll');
-    sections.forEach(section => observer.observe(section));
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <div className="landing-page">
       {/* Hero Section */}
@@ -197,7 +177,7 @@ const LandingPage = ({ navigateTo, scrollY }) => {
         <div className="absolute inset-0 bg-gradient-to-r from-pink-100/50 to-white/50"></div>
         
         <div className="relative z-10 container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
-          <div className={`text-center lg:text-left ${isVisible.hero ? 'fade-in-left' : 'opacity-0'}`}>
+          <div className="text-center lg:text-left fade-in-animation">
             <h1 className="text-5xl lg:text-6xl font-bold text-gray-800 mb-6 leading-tight">
               <span className="block text-pink-500">Radiant</span>
               <span className="block">Beauty</span>
@@ -221,7 +201,7 @@ const LandingPage = ({ navigateTo, scrollY }) => {
             </div>
           </div>
           
-          <div className={`relative ${isVisible.hero ? 'fade-in-right' : 'opacity-0'}`}>
+          <div className="relative fade-in-animation">
             <div className="absolute inset-0 bg-gradient-to-br from-pink-200 to-purple-200 rounded-3xl blur-3xl opacity-30 animate-pulse"></div>
             <img 
               src="https://images.unsplash.com/photo-1517320231404-b8ccf0fc3908" 
@@ -234,18 +214,18 @@ const LandingPage = ({ navigateTo, scrollY }) => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-white animate-on-scroll" data-id="about">
+      <section id="about" className="py-20 bg-white">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className={`relative ${isVisible.about ? 'fade-in-left' : 'opacity-0'}`}>
+            <div className="relative fade-in-animation">
               <img 
-                src="https://images.unsplash.com/photo-1612369278543-c4da62b819a6" 
-                alt="Skincare Products"
+                src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADkAOQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD2KiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/2Q=="
+                alt="Beautiful woman with BellaOil product"
                 className="rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-pink-200 rounded-full opacity-50 animate-pulse"></div>
             </div>
-            <div className={`${isVisible.about ? 'fade-in-right' : 'opacity-0'}`}>
+            <div className="fade-in-animation">
               <h2 className="text-4xl font-bold text-gray-800 mb-6">
                 Beauty That <br />
                 <span className="text-pink-500">Comes Naturally</span>
@@ -279,9 +259,9 @@ const LandingPage = ({ navigateTo, scrollY }) => {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 bg-gray-50 animate-on-scroll" data-id="benefits">
+      <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-6">
-          <div className={`text-center mb-16 ${isVisible.benefits ? 'fade-in-up' : 'opacity-0'}`}>
+          <div className="text-center mb-16 fade-in-animation">
             <h2 className="text-4xl font-bold text-gray-800 mb-4">
               Why Choose <span className="text-pink-500">BellaOil</span>
             </h2>
@@ -308,7 +288,7 @@ const LandingPage = ({ navigateTo, scrollY }) => {
                 description: "Perfect for all skin types, our pure and natural ingredients provide gentle care without harsh chemicals."
               }
             ].map((benefit, index) => (
-              <div key={index} className={`benefit-card text-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${isVisible.benefits ? 'fade-in-up' : 'opacity-0'}`} style={{ animationDelay: `${index * 0.2}s` }}>
+              <div key={index} className="benefit-card text-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 fade-in-animation">
                 <div className="w-16 h-16 bg-pink-500 rounded-full flex items-center justify-center mx-auto mb-6 hover:bg-pink-600 transition-colors duration-300">
                   <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={benefit.icon} />
@@ -323,9 +303,9 @@ const LandingPage = ({ navigateTo, scrollY }) => {
       </section>
 
       {/* Products Preview */}
-      <section className="py-20 bg-white animate-on-scroll" data-id="products">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-6">
-          <div className={`text-center mb-16 ${isVisible.products ? 'fade-in-up' : 'opacity-0'}`}>
+          <div className="text-center mb-16 fade-in-animation">
             <h2 className="text-4xl font-bold text-gray-800 mb-4">
               Our <span className="text-pink-500">Beauty Collection</span>
             </h2>
@@ -358,7 +338,7 @@ const LandingPage = ({ navigateTo, scrollY }) => {
                 description: "Classic moisturizing and healing properties."
               }
             ].map((product, index) => (
-              <div key={index} className={`product-preview-card group ${isVisible.products ? 'fade-in-up' : 'opacity-0'}`} style={{ animationDelay: `${index * 0.1}s` }}>
+              <div key={index} className="product-preview-card group fade-in-animation">
                 <div className="bg-gray-50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
                   <div className="relative overflow-hidden">
                     <img 
@@ -392,9 +372,9 @@ const LandingPage = ({ navigateTo, scrollY }) => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-pink-50 animate-on-scroll" data-id="testimonials">
+      <section className="py-20 bg-pink-50">
         <div className="container mx-auto px-6">
-          <div className={`text-center mb-16 ${isVisible.testimonials ? 'fade-in-up' : 'opacity-0'}`}>
+          <div className="text-center mb-16 fade-in-animation">
             <h2 className="text-4xl font-bold text-gray-800 mb-4">
               What Our <span className="text-pink-500">Customers Say</span>
             </h2>
@@ -424,7 +404,7 @@ const LandingPage = ({ navigateTo, scrollY }) => {
                 text: "I've been using the walnut oil for my hair and skin for months now. The results are amazing - my hair is shinier and my skin feels so nourished."
               }
             ].map((testimonial, index) => (
-              <div key={index} className={`testimonial-card ${isVisible.testimonials ? 'fade-in-up' : 'opacity-0'}`} style={{ animationDelay: `${index * 0.2}s` }}>
+              <div key={index} className="testimonial-card fade-in-animation">
                 <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center transform hover:scale-105">
                   <img 
                     src={testimonial.image} 
@@ -448,9 +428,9 @@ const LandingPage = ({ navigateTo, scrollY }) => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-pink-500 to-purple-600 text-white animate-on-scroll" data-id="cta">
+      <section className="py-20 bg-gradient-to-r from-pink-500 to-purple-600 text-white">
         <div className="container mx-auto px-6 text-center">
-          <div className={`${isVisible.cta ? 'fade-in-up' : 'opacity-0'}`}>
+          <div className="fade-in-animation">
             <h2 className="text-4xl font-bold mb-6">
               Ready to Glow?
             </h2>
@@ -478,25 +458,6 @@ const LandingPage = ({ navigateTo, scrollY }) => {
 
 const ProductPage = ({ scrollY }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [isVisible, setIsVisible] = useState({});
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(prev => ({ ...prev, [entry.target.id]: true }));
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const sections = document.querySelectorAll('.animate-on-scroll');
-    sections.forEach(section => observer.observe(section));
-
-    return () => observer.disconnect();
-  }, []);
 
   const products = [
     {
@@ -544,9 +505,9 @@ const ProductPage = ({ scrollY }) => {
   return (
     <div className="product-page pt-20">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-pink-50 to-white animate-on-scroll" data-id="hero">
+      <section className="py-20 bg-gradient-to-br from-pink-50 to-white">
         <div className="container mx-auto px-6 text-center">
-          <div className={`${isVisible.hero ? 'fade-in-up' : 'opacity-0'}`}>
+          <div className="fade-in-animation">
             <h1 className="text-5xl font-bold text-gray-800 mb-6">
               Beauty <span className="text-pink-500">Collection</span>
             </h1>
@@ -559,11 +520,11 @@ const ProductPage = ({ scrollY }) => {
       </section>
 
       {/* Products Grid */}
-      <section className="py-20 bg-white animate-on-scroll" data-id="products">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12">
             {products.map((product, index) => (
-              <div key={product.id} className={`product-card group ${isVisible.products ? 'fade-in-up' : 'opacity-0'}`} style={{ animationDelay: `${index * 0.2}s` }}>
+              <div key={product.id} className="product-card group fade-in-animation">
                 <div className="bg-gradient-to-br from-pink-50 to-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-105 border border-pink-100">
                   <div className="relative overflow-hidden">
                     <img 
@@ -625,9 +586,9 @@ const ProductPage = ({ scrollY }) => {
       </section>
 
       {/* How to Use Section */}
-      <section className="py-20 bg-gray-50 animate-on-scroll" data-id="howto">
+      <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-6">
-          <div className={`text-center mb-16 ${isVisible.howto ? 'fade-in-up' : 'opacity-0'}`}>
+          <div className="text-center mb-16 fade-in-animation">
             <h2 className="text-4xl font-bold text-gray-800 mb-4">
               How to Use <span className="text-pink-500">Your Beauty Oils</span>
             </h2>
@@ -657,7 +618,7 @@ const ProductPage = ({ scrollY }) => {
                 color: "bg-pink-600"
               }
             ].map((step, index) => (
-              <div key={index} className={`text-center ${isVisible.howto ? 'fade-in-up' : 'opacity-0'}`} style={{ animationDelay: `${index * 0.2}s` }}>
+              <div key={index} className="text-center fade-in-animation">
                 <div className={`w-20 h-20 ${step.color} rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110`}>
                   <span className="text-white font-bold text-2xl">{step.step}</span>
                 </div>
