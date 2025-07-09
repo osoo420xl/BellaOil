@@ -4,6 +4,13 @@ import './App.css';
 const App = () => {
   const [currentPage, setCurrentPage] = useState('landing');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -12,37 +19,47 @@ const App = () => {
     setIsMenuOpen(false);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="app">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-pink-100">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-pink-100 transition-all duration-300">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold text-gray-800">
+          <button 
+            onClick={() => {
+              navigateTo('landing');
+              scrollToTop();
+            }}
+            className="text-2xl font-bold text-gray-800 hover:scale-105 transition-transform duration-300 logo-bounce"
+          >
             <span className="text-pink-500">Bella</span>Oil
-          </div>
+          </button>
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
             <button 
               onClick={() => navigateTo('landing')}
-              className={`text-gray-700 hover:text-pink-500 transition-colors ${currentPage === 'landing' ? 'text-pink-500' : ''}`}
+              className={`text-gray-700 hover:text-pink-500 transition-colors duration-300 hover:scale-105 ${currentPage === 'landing' ? 'text-pink-500' : ''}`}
             >
               Home
             </button>
             <button 
               onClick={() => navigateTo('products')}
-              className={`text-gray-700 hover:text-pink-500 transition-colors ${currentPage === 'products' ? 'text-pink-500' : ''}`}
+              className={`text-gray-700 hover:text-pink-500 transition-colors duration-300 hover:scale-105 ${currentPage === 'products' ? 'text-pink-500' : ''}`}
             >
               Products
             </button>
-            <a href="#about" className="text-gray-700 hover:text-pink-500 transition-colors">About</a>
-            <a href="#contact" className="text-gray-700 hover:text-pink-500 transition-colors">Contact</a>
+            <a href="#about" className="text-gray-700 hover:text-pink-500 transition-colors duration-300 hover:scale-105">About</a>
+            <a href="#contact" className="text-gray-700 hover:text-pink-500 transition-colors duration-300 hover:scale-105">Contact</a>
           </nav>
 
           {/* Mobile Menu Toggle */}
           <button 
             onClick={toggleMenu}
-            className="md:hidden p-2 text-gray-700 hover:text-pink-500 transition-colors"
+            className="md:hidden p-2 text-gray-700 hover:text-pink-500 transition-colors duration-300"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -52,22 +69,22 @@ const App = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-white/95 backdrop-blur-sm border-t border-pink-100">
+          <div className="md:hidden bg-white/95 backdrop-blur-sm border-t border-pink-100 slide-down">
             <div className="px-6 py-4 space-y-4">
               <button 
                 onClick={() => navigateTo('landing')}
-                className="block w-full text-left text-gray-700 hover:text-pink-500 transition-colors"
+                className="block w-full text-left text-gray-700 hover:text-pink-500 transition-colors duration-300"
               >
                 Home
               </button>
               <button 
                 onClick={() => navigateTo('products')}
-                className="block w-full text-left text-gray-700 hover:text-pink-500 transition-colors"
+                className="block w-full text-left text-gray-700 hover:text-pink-500 transition-colors duration-300"
               >
                 Products
               </button>
-              <a href="#about" className="block text-gray-700 hover:text-pink-500 transition-colors">About</a>
-              <a href="#contact" className="block text-gray-700 hover:text-pink-500 transition-colors">Contact</a>
+              <a href="#about" className="block text-gray-700 hover:text-pink-500 transition-colors duration-300">About</a>
+              <a href="#contact" className="block text-gray-700 hover:text-pink-500 transition-colors duration-300">Contact</a>
             </div>
           </div>
         )}
@@ -75,8 +92,8 @@ const App = () => {
 
       {/* Main Content */}
       <main>
-        {currentPage === 'landing' && <LandingPage navigateTo={navigateTo} />}
-        {currentPage === 'products' && <ProductPage />}
+        {currentPage === 'landing' && <LandingPage navigateTo={navigateTo} scrollY={scrollY} />}
+        {currentPage === 'products' && <ProductPage scrollY={scrollY} />}
       </main>
 
       {/* Footer */}
@@ -91,17 +108,17 @@ const App = () => {
                 Premium olive oil skincare products crafted for radiant, healthy skin.
               </p>
               <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-pink-400 transition-colors">
+                <a href="#" className="text-gray-400 hover:text-pink-400 transition-colors duration-300 hover:scale-110">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
                   </svg>
                 </a>
-                <a href="#" className="text-gray-400 hover:text-pink-400 transition-colors">
+                <a href="#" className="text-gray-400 hover:text-pink-400 transition-colors duration-300 hover:scale-110">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.748.1.12.112.225.085.347-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.163-1.506-.402-2.448-1.662-2.448-2.675 0-3.773 2.745-7.243 7.92-7.243 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001 12.017.001z"/>
                   </svg>
                 </a>
-                <a href="#" className="text-gray-400 hover:text-pink-400 transition-colors">
+                <a href="#" className="text-gray-400 hover:text-pink-400 transition-colors duration-300 hover:scale-110">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12.004 5.838c-3.403 0-6.158 2.758-6.158 6.158 0 3.403 2.758 6.158 6.158 6.158 3.403 0 6.158-2.758 6.158-6.158 0-3.403-2.758-6.158-6.158-6.158zm0 10.155c-2.209 0-3.997-1.789-3.997-3.997s1.789-3.997 3.997-3.997 3.997 1.789 3.997 3.997-1.789 3.997-3.997 3.997z"/>
                     <path d="M18.406 4.594c-.796 0-1.441.645-1.441 1.441s.645 1.441 1.441 1.441 1.441-.645 1.441-1.441-.645-1.441-1.441-1.441z"/>
@@ -113,19 +130,19 @@ const App = () => {
             <div>
               <h4 className="font-semibold mb-4">Products</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-pink-400 transition-colors">Canterion Oil</a></li>
-                <li><a href="#" className="hover:text-pink-400 transition-colors">Carrot Oil</a></li>
-                <li><a href="#" className="hover:text-pink-400 transition-colors">Walnut Oil</a></li>
-                <li><a href="#" className="hover:text-pink-400 transition-colors">Pure Olive Oil</a></li>
+                <li><a href="#" className="hover:text-pink-400 transition-colors duration-300">Canterion Oil</a></li>
+                <li><a href="#" className="hover:text-pink-400 transition-colors duration-300">Carrot Oil</a></li>
+                <li><a href="#" className="hover:text-pink-400 transition-colors duration-300">Walnut Oil</a></li>
+                <li><a href="#" className="hover:text-pink-400 transition-colors duration-300">Pure Olive Oil</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-pink-400 transition-colors">Contact Us</a></li>
-                <li><a href="#" className="hover:text-pink-400 transition-colors">FAQ</a></li>
-                <li><a href="#" className="hover:text-pink-400 transition-colors">Shipping</a></li>
-                <li><a href="#" className="hover:text-pink-400 transition-colors">Returns</a></li>
+                <li><a href="#" className="hover:text-pink-400 transition-colors duration-300">Contact Us</a></li>
+                <li><a href="#" className="hover:text-pink-400 transition-colors duration-300">FAQ</a></li>
+                <li><a href="#" className="hover:text-pink-400 transition-colors duration-300">Shipping</a></li>
+                <li><a href="#" className="hover:text-pink-400 transition-colors duration-300">Returns</a></li>
               </ul>
             </div>
             <div>
@@ -137,7 +154,7 @@ const App = () => {
                   placeholder="Enter your email"
                   className="flex-1 px-4 py-2 rounded-l-lg bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-400"
                 />
-                <button className="px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-r-lg transition-colors">
+                <button className="px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-r-lg transition-colors duration-300">
                   Subscribe
                 </button>
               </form>
@@ -152,15 +169,35 @@ const App = () => {
   );
 };
 
-const LandingPage = ({ navigateTo }) => {
+const LandingPage = ({ navigateTo, scrollY }) => {
+  const [isVisible, setIsVisible] = useState({});
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(prev => ({ ...prev, [entry.target.id]: true }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const sections = document.querySelectorAll('.animate-on-scroll');
+    sections.forEach(section => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="landing-page">
       {/* Hero Section */}
-      <section className="hero-section relative min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-white">
+      <section className="hero-section relative min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-white overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-pink-100/50 to-white/50"></div>
         
         <div className="relative z-10 container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
-          <div className="text-center lg:text-left">
+          <div className={`text-center lg:text-left ${isVisible.hero ? 'fade-in-left' : 'opacity-0'}`}>
             <h1 className="text-5xl lg:text-6xl font-bold text-gray-800 mb-6 leading-tight">
               <span className="block text-pink-500">Radiant</span>
               <span className="block">Beauty</span>
@@ -174,40 +211,41 @@ const LandingPage = ({ navigateTo }) => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <button 
                 onClick={() => navigateTo('products')}
-                className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-colors shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 Shop Collection
               </button>
-              <button className="border-2 border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white px-8 py-4 rounded-full text-lg font-semibold transition-colors">
+              <button className="border-2 border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300">
                 Learn More
               </button>
             </div>
           </div>
           
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-pink-200 to-purple-200 rounded-3xl blur-3xl opacity-30"></div>
+          <div className={`relative ${isVisible.hero ? 'fade-in-right' : 'opacity-0'}`}>
+            <div className="absolute inset-0 bg-gradient-to-br from-pink-200 to-purple-200 rounded-3xl blur-3xl opacity-30 animate-pulse"></div>
             <img 
-              src="https://images.unsplash.com/photo-1619631845726-5a27e1b5605b" 
-              alt="Premium Beauty Products"
-              className="relative z-10 w-full max-w-lg mx-auto rounded-3xl shadow-2xl"
+              src="https://images.unsplash.com/photo-1517320231404-b8ccf0fc3908" 
+              alt="Premium BellaOil Beauty Product"
+              className="relative z-10 w-full max-w-lg mx-auto rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-500"
+              style={{ transform: `translateY(${scrollY * 0.1}px)` }}
             />
           </div>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-white">
+      <section id="about" className="py-20 bg-white animate-on-scroll" data-id="about">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="relative">
+            <div className={`relative ${isVisible.about ? 'fade-in-left' : 'opacity-0'}`}>
               <img 
                 src="https://images.unsplash.com/photo-1612369278543-c4da62b819a6" 
                 alt="Skincare Products"
-                className="rounded-3xl shadow-2xl"
+                className="rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-pink-200 rounded-full opacity-50"></div>
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-pink-200 rounded-full opacity-50 animate-pulse"></div>
             </div>
-            <div>
+            <div className={`${isVisible.about ? 'fade-in-right' : 'opacity-0'}`}>
               <h2 className="text-4xl font-bold text-gray-800 mb-6">
                 Beauty That <br />
                 <span className="text-pink-500">Comes Naturally</span>
@@ -222,15 +260,15 @@ const LandingPage = ({ navigateTo }) => {
                 extracts, designed to nourish, protect, and enhance your natural radiance.
               </p>
               <div className="grid grid-cols-3 gap-6 text-center">
-                <div>
+                <div className="counter-up">
                   <div className="text-2xl font-bold text-pink-500">100%</div>
                   <div className="text-sm text-gray-600">Natural</div>
                 </div>
-                <div>
+                <div className="counter-up">
                   <div className="text-2xl font-bold text-pink-500">4</div>
                   <div className="text-sm text-gray-600">Unique Oils</div>
                 </div>
-                <div>
+                <div className="counter-up">
                   <div className="text-2xl font-bold text-pink-500">Premium</div>
                   <div className="text-sm text-gray-600">Quality</div>
                 </div>
@@ -241,9 +279,9 @@ const LandingPage = ({ navigateTo }) => {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 animate-on-scroll" data-id="benefits">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
+          <div className={`text-center mb-16 ${isVisible.benefits ? 'fade-in-up' : 'opacity-0'}`}>
             <h2 className="text-4xl font-bold text-gray-800 mb-4">
               Why Choose <span className="text-pink-500">BellaOil</span>
             </h2>
@@ -253,52 +291,41 @@ const LandingPage = ({ navigateTo }) => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="benefit-card text-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
-              <div className="w-16 h-16 bg-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
+            {[
+              {
+                icon: "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z",
+                title: "Deep Nourishment",
+                description: "Rich in antioxidants and vitamins, our oils penetrate deeply to nourish and moisturize your skin from within."
+              },
+              {
+                icon: "M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z",
+                title: "Radiant Glow",
+                description: "Enhance your natural beauty with our vitamin-rich formulations that promote healthy, glowing skin."
+              },
+              {
+                icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
+                title: "Gentle Care",
+                description: "Perfect for all skin types, our pure and natural ingredients provide gentle care without harsh chemicals."
+              }
+            ].map((benefit, index) => (
+              <div key={index} className={`benefit-card text-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ${isVisible.benefits ? 'fade-in-up' : 'opacity-0'}`} style={{ animationDelay: `${index * 0.2}s` }}>
+                <div className="w-16 h-16 bg-pink-500 rounded-full flex items-center justify-center mx-auto mb-6 hover:bg-pink-600 transition-colors duration-300">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={benefit.icon} />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">{benefit.title}</h3>
+                <p className="text-gray-600">{benefit.description}</p>
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Deep Nourishment</h3>
-              <p className="text-gray-600">
-                Rich in antioxidants and vitamins, our oils penetrate deeply to nourish and 
-                moisturize your skin from within.
-              </p>
-            </div>
-            
-            <div className="benefit-card text-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
-              <div className="w-16 h-16 bg-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Radiant Glow</h3>
-              <p className="text-gray-600">
-                Enhance your natural beauty with our vitamin-rich formulations that promote 
-                healthy, glowing skin.
-              </p>
-            </div>
-            
-            <div className="benefit-card text-center p-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
-              <div className="w-16 h-16 bg-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Gentle Care</h3>
-              <p className="text-gray-600">
-                Perfect for all skin types, our pure and natural ingredients provide gentle 
-                care without harsh chemicals.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Products Preview */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white animate-on-scroll" data-id="products">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
+          <div className={`text-center mb-16 ${isVisible.products ? 'fade-in-up' : 'opacity-0'}`}>
             <h2 className="text-4xl font-bold text-gray-800 mb-4">
               Our <span className="text-pink-500">Beauty Collection</span>
             </h2>
@@ -312,39 +339,39 @@ const LandingPage = ({ navigateTo }) => {
             {[
               {
                 name: "Canterion Infused",
-                image: "https://images.unsplash.com/photo-1545735385-aa47cbbd92c2",
+                image: "https://images.pexels.com/photos/4491648/pexels-photo-4491648.jpeg",
                 description: "Soothing anti-inflammatory properties for sensitive skin."
               },
               {
                 name: "Carrot Infused",
-                image: "https://images.unsplash.com/photo-1611246987808-d303ef920c29",
+                image: "https://images.pexels.com/photos/4677725/pexels-photo-4677725.jpeg",
                 description: "Rich in beta-carotene for natural radiance and glow."
               },
               {
                 name: "Walnut Infused",
-                image: "https://images.unsplash.com/photo-1699206791200-414d95e68450",
+                image: "https://images.pexels.com/photos/7691165/pexels-photo-7691165.jpeg",
                 description: "Deep nourishment and repair for hair and skin."
               },
               {
                 name: "Pure Olive Oil",
-                image: "https://images.unsplash.com/photo-1646571771304-6ce2abf5724c",
+                image: "https://images.pexels.com/photos/8015792/pexels-photo-8015792.jpeg",
                 description: "Classic moisturizing and healing properties."
               }
             ].map((product, index) => (
-              <div key={index} className="product-preview-card group">
-                <div className="bg-gray-50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+              <div key={index} className={`product-preview-card group ${isVisible.products ? 'fade-in-up' : 'opacity-0'}`} style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className="bg-gray-50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
                   <div className="relative overflow-hidden">
                     <img 
                       src={product.image} 
                       alt={product.name}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
                   <div className="p-6">
                     <h3 className="text-xl font-semibold text-gray-800 mb-2">{product.name}</h3>
                     <p className="text-gray-600 text-sm mb-4">{product.description}</p>
-                    <button className="text-pink-500 hover:text-pink-600 font-medium text-sm transition-colors">
+                    <button className="text-pink-500 hover:text-pink-600 font-medium text-sm transition-colors duration-300">
                       Learn More →
                     </button>
                   </div>
@@ -356,7 +383,7 @@ const LandingPage = ({ navigateTo }) => {
           <div className="text-center mt-12">
             <button 
               onClick={() => navigateTo('products')}
-              className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-colors shadow-lg hover:shadow-xl"
+              className="bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
             >
               Shop All Products
             </button>
@@ -365,9 +392,9 @@ const LandingPage = ({ navigateTo }) => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-pink-50">
+      <section className="py-20 bg-pink-50 animate-on-scroll" data-id="testimonials">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
+          <div className={`text-center mb-16 ${isVisible.testimonials ? 'fade-in-up' : 'opacity-0'}`}>
             <h2 className="text-4xl font-bold text-gray-800 mb-4">
               What Our <span className="text-pink-500">Customers Say</span>
             </h2>
@@ -397,8 +424,8 @@ const LandingPage = ({ navigateTo }) => {
                 text: "I've been using the walnut oil for my hair and skin for months now. The results are amazing - my hair is shinier and my skin feels so nourished."
               }
             ].map((testimonial, index) => (
-              <div key={index} className="testimonial-card">
-                <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow text-center">
+              <div key={index} className={`testimonial-card ${isVisible.testimonials ? 'fade-in-up' : 'opacity-0'}`} style={{ animationDelay: `${index * 0.2}s` }}>
+                <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 text-center transform hover:scale-105">
                   <img 
                     src={testimonial.image} 
                     alt={testimonial.name}
@@ -421,25 +448,27 @@ const LandingPage = ({ navigateTo }) => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-pink-500 to-purple-600 text-white">
+      <section className="py-20 bg-gradient-to-r from-pink-500 to-purple-600 text-white animate-on-scroll" data-id="cta">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold mb-6">
-            Ready to Glow?
-          </h2>
-          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-            Join thousands of women who have discovered the secret to radiant, healthy skin 
-            with our premium olive oil beauty collection.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button 
-              onClick={() => navigateTo('products')}
-              className="bg-white text-pink-500 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl"
-            >
-              Shop Now
-            </button>
-            <button className="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-pink-500 transition-colors">
-              Learn More
-            </button>
+          <div className={`${isVisible.cta ? 'fade-in-up' : 'opacity-0'}`}>
+            <h2 className="text-4xl font-bold mb-6">
+              Ready to Glow?
+            </h2>
+            <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+              Join thousands of women who have discovered the secret to radiant, healthy skin 
+              with our premium olive oil beauty collection.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button 
+                onClick={() => navigateTo('products')}
+                className="bg-white text-pink-500 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
+                Shop Now
+              </button>
+              <button className="border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-pink-500 transition-all duration-300 transform hover:scale-105">
+                Learn More
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -447,14 +476,33 @@ const LandingPage = ({ navigateTo }) => {
   );
 };
 
-const ProductPage = () => {
+const ProductPage = ({ scrollY }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isVisible, setIsVisible] = useState({});
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(prev => ({ ...prev, [entry.target.id]: true }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const sections = document.querySelectorAll('.animate-on-scroll');
+    sections.forEach(section => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
 
   const products = [
     {
       id: 1,
       name: "Canterion Infused Beauty Oil",
-      image: "https://images.unsplash.com/photo-1545735385-aa47cbbd92c2",
+      image: "https://images.pexels.com/photos/4491648/pexels-photo-4491648.jpeg",
       price: "$34.99",
       description: "Soothing anti-inflammatory properties perfect for sensitive skin. Our canterion infusion helps calm irritation while providing deep moisturization for a healthy, radiant complexion.",
       benefits: ["Anti-inflammatory", "Gentle on sensitive skin", "Reduces redness", "Deep moisturization"],
@@ -464,7 +512,7 @@ const ProductPage = () => {
     {
       id: 2,
       name: "Carrot Infused Glow Oil",
-      image: "https://images.unsplash.com/photo-1611246987808-d303ef920c29",
+      image: "https://images.pexels.com/photos/4677725/pexels-photo-4677725.jpeg",
       price: "$32.99",
       description: "Rich in beta-carotene and vitamins for natural radiance and healthy glow. Perfect for those seeking luminous, youthful-looking skin with natural sun protection benefits.",
       benefits: ["Rich in beta-carotene", "Natural sun protection", "Promotes healthy glow", "Anti-aging properties"],
@@ -474,7 +522,7 @@ const ProductPage = () => {
     {
       id: 3,
       name: "Walnut Infused Repair Oil",
-      image: "https://images.unsplash.com/photo-1699206791200-414d95e68450",
+      image: "https://images.pexels.com/photos/7691165/pexels-photo-7691165.jpeg",
       price: "$36.99",
       description: "Deep nourishment and repair for damaged hair and skin. Rich in omega-3 fatty acids and proteins for intensive restoration and strengthening.",
       benefits: ["Deep nourishment", "Repairs damaged hair", "Rich in omega-3", "Intensive restoration"],
@@ -484,7 +532,7 @@ const ProductPage = () => {
     {
       id: 4,
       name: "Pure Olive Beauty Oil",
-      image: "https://images.unsplash.com/photo-1646571771304-6ce2abf5724c",
+      image: "https://images.pexels.com/photos/8015792/pexels-photo-8015792.jpeg",
       price: "$28.99",
       description: "Classic moisturizing and healing properties for all beauty uses. The purest form of our premium olive oil, perfect for daily skincare and hair care routines.",
       benefits: ["Classic moisturizing", "Healing properties", "All-purpose use", "Pure and natural"],
@@ -496,32 +544,35 @@ const ProductPage = () => {
   return (
     <div className="product-page pt-20">
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-pink-50 to-white">
+      <section className="py-20 bg-gradient-to-br from-pink-50 to-white animate-on-scroll" data-id="hero">
         <div className="container mx-auto px-6 text-center">
-          <h1 className="text-5xl font-bold text-gray-800 mb-6">
-            Beauty <span className="text-pink-500">Collection</span>
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Discover our carefully curated selection of premium olive oil beauty products, 
-            each designed to enhance your natural radiance and promote healthy, glowing skin.
-          </p>
+          <div className={`${isVisible.hero ? 'fade-in-up' : 'opacity-0'}`}>
+            <h1 className="text-5xl font-bold text-gray-800 mb-6">
+              Beauty <span className="text-pink-500">Collection</span>
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Discover our carefully curated selection of premium olive oil beauty products, 
+              each designed to enhance your natural radiance and promote healthy, glowing skin.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Products Grid */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white animate-on-scroll" data-id="products">
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12">
-            {products.map((product) => (
-              <div key={product.id} className="product-card group">
-                <div className="bg-gray-50 rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+            {products.map((product, index) => (
+              <div key={product.id} className={`product-card group ${isVisible.products ? 'fade-in-up' : 'opacity-0'}`} style={{ animationDelay: `${index * 0.2}s` }}>
+                <div className="bg-gradient-to-br from-pink-50 to-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-105 border border-pink-100">
                   <div className="relative overflow-hidden">
                     <img 
                       src={product.image} 
                       alt={product.name}
-                      className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
                     />
-                    <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full text-sm font-semibold text-gray-800">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold text-gray-800 shadow-lg">
                       {product.price}
                     </div>
                   </div>
@@ -535,7 +586,7 @@ const ProductPage = () => {
                         <h4 className="font-semibold text-gray-800 mb-2">Key Benefits:</h4>
                         <div className="flex flex-wrap gap-2">
                           {product.benefits.map((benefit, index) => (
-                            <span key={index} className="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm">
+                            <span key={index} className="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm hover:bg-pink-200 transition-colors duration-300">
                               {benefit}
                             </span>
                           ))}
@@ -546,7 +597,7 @@ const ProductPage = () => {
                         <h4 className="font-semibold text-gray-800 mb-2">Perfect For:</h4>
                         <div className="flex gap-2">
                           {product.uses.map((use, index) => (
-                            <span key={index} className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">
+                            <span key={index} className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm hover:bg-purple-200 transition-colors duration-300">
                               {use}
                             </span>
                           ))}
@@ -555,12 +606,12 @@ const ProductPage = () => {
                     </div>
                     
                     <div className="flex gap-4">
-                      <button className="flex-1 bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-full font-semibold transition-colors shadow-lg hover:shadow-xl">
+                      <button className="flex-1 bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
                         Add to Cart
                       </button>
                       <button 
                         onClick={() => setSelectedProduct(product)}
-                        className="px-6 py-3 border-2 border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white rounded-full font-semibold transition-colors"
+                        className="px-6 py-3 border-2 border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
                       >
                         Details
                       </button>
@@ -574,9 +625,9 @@ const ProductPage = () => {
       </section>
 
       {/* How to Use Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50 animate-on-scroll" data-id="howto">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
+          <div className={`text-center mb-16 ${isVisible.howto ? 'fade-in-up' : 'opacity-0'}`}>
             <h2 className="text-4xl font-bold text-gray-800 mb-4">
               How to Use <span className="text-pink-500">Your Beauty Oils</span>
             </h2>
@@ -586,52 +637,48 @@ const ProductPage = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-white font-bold text-2xl">1</span>
+            {[
+              {
+                step: "1",
+                title: "Cleanse",
+                description: "Start with clean, dry skin or hair. Remove any makeup or styling products for optimal absorption.",
+                color: "bg-pink-500"
+              },
+              {
+                step: "2",
+                title: "Apply",
+                description: "Warm a small amount between your palms and gently massage into skin or hair. A little goes a long way.",
+                color: "bg-purple-500"
+              },
+              {
+                step: "3",
+                title: "Glow",
+                description: "Allow the oil to absorb naturally. For hair, leave on for 30 minutes or overnight for intensive treatment.",
+                color: "bg-pink-600"
+              }
+            ].map((step, index) => (
+              <div key={index} className={`text-center ${isVisible.howto ? 'fade-in-up' : 'opacity-0'}`} style={{ animationDelay: `${index * 0.2}s` }}>
+                <div className={`w-20 h-20 ${step.color} rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110`}>
+                  <span className="text-white font-bold text-2xl">{step.step}</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">{step.title}</h3>
+                <p className="text-gray-600">{step.description}</p>
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Cleanse</h3>
-              <p className="text-gray-600">
-                Start with clean, dry skin or hair. Remove any makeup or styling products 
-                for optimal absorption.
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-20 h-20 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-white font-bold text-2xl">2</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Apply</h3>
-              <p className="text-gray-600">
-                Warm a small amount between your palms and gently massage into skin or hair. 
-                A little goes a long way.
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-20 h-20 bg-pink-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-white font-bold text-2xl">3</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">Glow</h3>
-              <p className="text-gray-600">
-                Allow the oil to absorb naturally. For hair, leave on for 30 minutes or 
-                overnight for intensive treatment.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Product Detail Modal */}
       {selectedProduct && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 modal-overlay">
+          <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl modal-content">
             <div className="p-8">
               <div className="flex justify-between items-start mb-6">
                 <h2 className="text-3xl font-bold text-gray-800">{selectedProduct.name}</h2>
                 <button 
                   onClick={() => setSelectedProduct(null)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  className="text-gray-400 hover:text-gray-600 transition-colors duration-300 hover:scale-110"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -644,7 +691,7 @@ const ProductPage = () => {
                   <img 
                     src={selectedProduct.image} 
                     alt={selectedProduct.name}
-                    className="w-full h-96 object-cover rounded-2xl"
+                    className="w-full h-96 object-cover rounded-2xl shadow-lg"
                   />
                 </div>
                 
@@ -678,7 +725,7 @@ const ProductPage = () => {
                       </div>
                     </div>
                     
-                    <button className="w-full bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-colors shadow-lg hover:shadow-xl">
+                    <button className="w-full bg-pink-500 hover:bg-pink-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
                       Add to Cart - {selectedProduct.price}
                     </button>
                   </div>
