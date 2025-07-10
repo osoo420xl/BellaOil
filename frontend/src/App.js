@@ -14,6 +14,8 @@ import bOil5Webp from './b-oil5.webp';
 import bOil6Webp from './b-oil6.webp';
 import { FaLeaf, FaRegGem, FaTint, FaStar, FaQuoteLeft, FaCheckCircle, FaRegClock, FaSpa, FaSmile, FaSearch } from 'react-icons/fa';
 import ProductPage from './ProductPage';
+import CTAButton from './components/CTAButton';
+import FloatingCTA from './components/FloatingCTA';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import logo from './logo.png';
 
@@ -96,37 +98,77 @@ const Logo = () => (
 
 const StickyHeader = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+  
   return (
     <header className={`w-full fixed top-0 left-0 z-50 transition-all duration-300 bg-white/90 backdrop-blur border-b border-rose-gold-100 shadow-sm ${scrolled ? 'py-2' : 'py-4'}`}>
       <div className="container mx-auto px-4 flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-0">
-        <div className="flex items-center gap-4 w-full md:w-auto">
+        <div className="flex items-center justify-between w-full md:w-auto">
           <Logo />
-          {/* Search bar (desktop) */}
-          <form className="hidden md:flex items-center ml-6 bg-white rounded-full border border-rose-gold-100 px-3 py-1 shadow-sm w-72 max-w-xs">
-            <FaSearch className="text-rose-gold-400 mr-2" />
-            <input type="text" placeholder="Search products..." className="bg-transparent outline-none text-gray-900 font-sans-body w-full" />
-          </form>
+          {/* Mobile menu button */}
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 text-gray-700 hover:text-rose-gold-500 transition-colors"
+            aria-label="Toggle mobile menu"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {mobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
         </div>
-        {/* Search bar (mobile, above nav) */}
-        <form className="flex md:hidden items-center mt-2 mb-2 bg-white rounded-full border border-rose-gold-100 px-3 py-1 shadow-sm w-full">
+        
+        {/* Search bar (desktop) */}
+        <form className="hidden md:flex items-center ml-6 bg-white rounded-full border border-rose-gold-100 px-3 py-1 shadow-sm w-72 max-w-xs">
           <FaSearch className="text-rose-gold-400 mr-2" />
           <input type="text" placeholder="Search products..." className="bg-transparent outline-none text-gray-900 font-sans-body w-full" />
         </form>
+        
+        {/* Desktop Navigation */}
         <nav className="hidden md:flex gap-8 text-gray-900 text-lg font-sans-body">
           <Link to="/" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">Home</Link>
           <Link to="/products" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">Products</Link>
           <a href="#ingredients" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">Ingredients</a>
-          <a href="#results" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">Results</a>
-          <a href="#journal" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">Journal</a>
+          <a href="#about" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">About</a>
+          <a href="#testimonials" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">Reviews</a>
           <a href="#contact" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">Contact</a>
         </nav>
-        <button onClick={() => window.location.href='/products'} className="ml-6 bg-rose-gold-500 hover:bg-rose-gold-600 text-white px-6 py-2 rounded-full font-semibold shadow transition-all duration-300 text-base font-sans-body hidden md:block">Shop Now</button>
+        
+        <div className="hidden md:flex items-center gap-4">
+          <button onClick={() => window.location.href='/products'} className="bg-rose-gold-500 hover:bg-rose-gold-600 text-white px-6 py-2 rounded-full font-semibold shadow transition-all duration-300 text-base font-sans-body">Shop Now</button>
+        </div>
       </div>
+      
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-white border-t border-rose-gold-100 py-4 px-4">
+          {/* Search bar (mobile) */}
+          <form className="flex items-center mb-4 bg-white rounded-full border border-rose-gold-100 px-3 py-2 shadow-sm w-full">
+            <FaSearch className="text-rose-gold-400 mr-2" />
+            <input type="text" placeholder="Search products..." className="bg-transparent outline-none text-gray-900 font-sans-body w-full" />
+          </form>
+          
+          {/* Mobile Navigation */}
+          <nav className="flex flex-col gap-4 text-gray-900 text-lg font-sans-body">
+            <Link to="/" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Home</Link>
+            <Link to="/products" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Products</Link>
+            <a href="#ingredients" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Ingredients</a>
+            <a href="#about" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>About</a>
+            <a href="#testimonials" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Reviews</a>
+            <a href="#contact" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Contact</a>
+            <button onClick={() => {window.location.href='/products'; setMobileMenuOpen(false);}} className="bg-rose-gold-500 hover:bg-rose-gold-600 text-white px-6 py-3 rounded-full font-semibold shadow transition-all duration-300 text-base font-sans-body w-full mt-4">Shop Now</button>
+          </nav>
+        </div>
+      )}
     </header>
   );
 };
@@ -192,6 +234,158 @@ const HeroSection = ({ scrollY }) => (
   </section>
 );
 
+// --- INGREDIENTS SECTION ---
+const IngredientsSection = () => (
+  <section id="ingredients" className="container mx-auto px-4 md:px-8 py-24">
+    <div className="text-center mb-16">
+      <h2 className="text-3xl md:text-5xl font-serif-head font-bold text-gray-900 mb-6">Pure Ingredients, Proven Results</h2>
+      <p className="text-xl text-gray-700 font-sans-body max-w-3xl mx-auto">Every drop of BellaOil is crafted with the finest natural ingredients, carefully selected for their proven benefits to skin and hair health.</p>
+    </div>
+    
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Cold-Pressed Olive Oil */}
+      <div className="bg-white rounded-3xl p-8 shadow-lg border border-rose-gold-50">
+        <div className="w-16 h-16 bg-rose-gold-100 rounded-full flex items-center justify-center mb-6">
+          <FaLeaf className="text-2xl text-rose-gold-600" />
+        </div>
+        <h3 className="text-2xl font-serif-head font-bold text-gray-900 mb-4">Cold-Pressed Olive Oil</h3>
+        <p className="text-gray-700 font-sans-body mb-4">Our signature ingredient, rich in antioxidants and essential fatty acids that deeply nourish and protect your skin and hair.</p>
+        <ul className="text-sm text-gray-600 space-y-2">
+          <li>• Rich in Vitamin E & antioxidants</li>
+          <li>• Deep hydration without greasiness</li>
+          <li>• Natural anti-inflammatory properties</li>
+        </ul>
+      </div>
+      
+      {/* Botanical Extracts */}
+      <div className="bg-white rounded-3xl p-8 shadow-lg border border-rose-gold-50">
+        <div className="w-16 h-16 bg-rose-gold-100 rounded-full flex items-center justify-center mb-6">
+          <FaSpa className="text-2xl text-rose-gold-600" />
+        </div>
+        <h3 className="text-2xl font-serif-head font-bold text-gray-900 mb-4">Botanical Extracts</h3>
+        <p className="text-gray-700 font-sans-body mb-4">Carefully selected plant extracts that enhance the natural benefits of olive oil for targeted results.</p>
+        <ul className="text-sm text-gray-600 space-y-2">
+          <li>• Chamomile for soothing</li>
+          <li>• Lavender for calming</li>
+          <li>• Rosemary for scalp health</li>
+        </ul>
+      </div>
+      
+      {/* Natural Preservatives */}
+      <div className="bg-white rounded-3xl p-8 shadow-lg border border-rose-gold-50">
+        <div className="w-16 h-16 bg-rose-gold-100 rounded-full flex items-center justify-center mb-6">
+          <FaRegGem className="text-2xl text-rose-gold-600" />
+        </div>
+        <h3 className="text-2xl font-serif-head font-bold text-gray-900 mb-4">Natural Preservatives</h3>
+        <p className="text-gray-700 font-sans-body mb-4">We use only natural preservatives to maintain freshness while keeping our formula 100% natural and safe.</p>
+        <ul className="text-sm text-gray-600 space-y-2">
+          <li>• Vitamin E as natural preservative</li>
+          <li>• No synthetic chemicals</li>
+          <li>• Safe for sensitive skin</li>
+        </ul>
+      </div>
+    </div>
+    
+    {/* Trust Badges */}
+    <div className="mt-16 text-center">
+      <div className="flex flex-wrap justify-center items-center gap-8">
+        <div className="flex flex-col items-center">
+          <FaSmile className="text-3xl text-rose-gold-400 mb-2" />
+          <span className="text-sm font-semibold text-gray-700">Dermatologist Approved</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <FaLeaf className="text-3xl text-rose-gold-400 mb-2" />
+          <span className="text-sm font-semibold text-gray-700">100% Natural</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <FaRegGem className="text-3xl text-rose-gold-400 mb-2" />
+          <span className="text-sm font-semibold text-gray-700">Cruelty-Free</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <FaSpa className="text-3xl text-rose-gold-400 mb-2" />
+          <span className="text-sm font-semibold text-gray-700">Vegan</span>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+// --- ABOUT SECTION ---
+const AboutSection = () => (
+  <section id="about" className="container mx-auto px-4 md:px-8 py-24">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div>
+        <h2 className="text-3xl md:text-5xl font-serif-head font-bold text-gray-900 mb-6">Our Story</h2>
+        <p className="text-lg text-gray-700 font-sans-body mb-6 leading-relaxed">
+          BellaOil was born from a simple belief: that nature provides the most effective solutions for beauty and wellness. Our journey began when we discovered the transformative power of pure, cold-pressed olive oil.
+        </p>
+        <p className="text-lg text-gray-700 font-sans-body mb-8 leading-relaxed">
+          We believe that true beauty comes from within, and that the best skincare and haircare should be as natural as the ingredients themselves. That's why every product we create is crafted with the finest natural ingredients, carefully selected for their proven benefits.
+        </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="flex items-start gap-3">
+            <FaLeaf className="text-rose-gold-500 text-xl mt-1" />
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-1">Natural First</h3>
+              <p className="text-sm text-gray-600">We never compromise on natural ingredients</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <FaSpa className="text-rose-gold-500 text-xl mt-1" />
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-1">Science Backed</h3>
+              <p className="text-sm text-gray-600">Every ingredient is chosen for proven benefits</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <FaSmile className="text-rose-gold-500 text-xl mt-1" />
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-1">Results Driven</h3>
+              <p className="text-sm text-gray-600">We focus on what actually works</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <FaRegGem className="text-rose-gold-500 text-xl mt-1" />
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-1">Quality Assured</h3>
+              <p className="text-sm text-gray-600">Every batch is tested for purity</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="relative">
+        <div className="bg-rose-gold-50 rounded-3xl p-8 shadow-lg">
+          <h3 className="text-2xl font-serif-head font-bold text-gray-900 mb-4">Our Mission</h3>
+          <p className="text-gray-700 font-sans-body mb-6">
+            To provide everyone with access to natural, effective beauty solutions that enhance their natural radiance and confidence.
+          </p>
+          
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 bg-rose-gold-500 rounded-full"></div>
+              <span className="text-gray-700">100% Natural Ingredients</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 bg-rose-gold-500 rounded-full"></div>
+              <span className="text-gray-700">Dermatologist Approved</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 bg-rose-gold-500 rounded-full"></div>
+              <span className="text-gray-700">Cruelty-Free & Vegan</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 bg-rose-gold-500 rounded-full"></div>
+              <span className="text-gray-700">Sustainable Packaging</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
 // --- ALTERNATING IMAGE/CONTENT SECTIONS ---
 const EditorialSection = ({ image, alt, title, text, reverse, children }) => (
   <section className={`container mx-auto px-4 md:px-8 py-24 flex flex-col ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-16`}> 
@@ -214,26 +408,37 @@ const GallerySection = () => (
   <section role="region" aria-labelledby="gallery-heading" className="container mx-auto px-4 md:px-8 py-24">
     <h2 id="gallery-heading" className="text-3xl md:text-5xl font-serif-head font-bold text-gray-900 text-center mb-20">BellaOil in Real Life</h2>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-      <picture>
-        <source srcSet={bOil1Webp} type="image/webp" />
-        <img src={bOil1} alt="BellaOil bottle" loading="lazy" className="rounded-2xl shadow-lg w-full h-[384px] object-cover object-center border-4 border-white levitate" />
-      </picture>
-      <picture>
-        <source srcSet={bOil2Webp} type="image/webp" />
-        <img src={bOil2} alt="Lifestyle with BellaOil" loading="lazy" className="rounded-2xl shadow-lg w-full h-[384px] object-cover object-center border-4 border-white levitate" />
-      </picture>
-      <picture>
-        <source srcSet={bOil3Webp} type="image/webp" />
-        <img src={bOil3} alt="BellaOil on minimal background" loading="lazy" className="rounded-2xl shadow-lg w-full h-[384px] object-cover object-center border-4 border-white levitate" />
-      </picture>
-      <picture>
-        <source srcSet={bOil4Webp} type="image/webp" />
-        <img src={bOil4} alt="Glowing skin and hair" loading="lazy" className="rounded-2xl shadow-lg w-full h-[384px] object-cover object-center border-4 border-white levitate" />
-      </picture>
-      <picture>
-        <source srcSet={bOil6Webp} type="image/webp" />
-        <img src={bOil6} alt="BellaOil lifestyle" loading="lazy" className="rounded-2xl shadow-lg w-full h-[384px] object-cover object-center border-4 border-white levitate" />
-      </picture>
+      {[
+        { image: bOil1, webp: bOil1Webp, alt: "BellaOil bottle", title: "Pure Radiance" },
+        { image: bOil2, webp: bOil2Webp, alt: "Lifestyle with BellaOil", title: "Natural Glow" },
+        { image: bOil3, webp: bOil3Webp, alt: "BellaOil on minimal background", title: "Deep Hydration" },
+        { image: bOil4, webp: bOil4Webp, alt: "Glowing skin and hair", title: "Lustrous Hair" },
+        { image: bOil6, webp: bOil6Webp, alt: "BellaOil lifestyle", title: "Skin & Hair" }
+      ].map((item, index) => (
+        <div key={index} className="group relative overflow-hidden rounded-2xl shadow-lg border-4 border-white">
+          <picture>
+            <source srcSet={item.webp} type="image/webp" />
+            <img src={item.image} alt={item.alt} loading="lazy" className="w-full h-[384px] object-cover object-center transition-transform duration-500 group-hover:scale-110 levitate" />
+          </picture>
+          
+          {/* Overlay with CTA */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+            <div className="p-4 w-full">
+              <h3 className="text-white font-bold text-lg mb-2">{item.title}</h3>
+              <div className="flex gap-2">
+                <CTAButton 
+                  variant="primary" 
+                  size="sm"
+                  icon="cart"
+                  className="flex-1"
+                >
+                  Shop Now
+                </CTAButton>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   </section>
 );
@@ -322,6 +527,19 @@ const TestimonialsSection = () => (
         <span className="text-xs font-semibold text-gray-700">Cruelty-Free</span>
       </div>
     </div>
+    
+    {/* Enhanced CTA after testimonials */}
+    <div className="mt-12 text-center">
+      <CTAButton 
+        variant="primary" 
+        size="lg"
+        icon="cart"
+        onClick={() => window.location.href='/products'}
+        className="mx-auto"
+      >
+        Join Our Happy Customers
+      </CTAButton>
+    </div>
   </section>
 );
 
@@ -348,8 +566,30 @@ const ShareYourGlowSection = () => (
         <img src={bOil4} alt="UGC 4" loading="lazy" className="rounded-2xl shadow-md w-full h-40 md:h-56 object-cover object-center border-4 border-white" />
       </picture>
     </div>
-    <div className="text-center">
-      <a href="https://instagram.com/bellaoil" target="_blank" rel="noopener noreferrer" className="inline-block bg-rose-gold-500 hover:bg-rose-gold-600 text-white px-8 py-3 rounded-full font-semibold font-sans-body shadow transition-all duration-300">Follow us on Instagram</a>
+    <div className="text-center space-y-4">
+      <CTAButton 
+        variant="primary" 
+        size="lg"
+        onClick={() => window.open('https://instagram.com/bellaoil', '_blank')}
+      >
+        Follow us on Instagram
+      </CTAButton>
+      <div className="flex justify-center gap-4">
+        <CTAButton 
+          variant="secondary" 
+          size="md"
+          icon="cart"
+          onClick={() => window.location.href='/products'}
+        >
+          Shop BellaOil
+        </CTAButton>
+        <CTAButton 
+          variant="outline" 
+          size="md"
+        >
+          Share Your Story
+        </CTAButton>
+      </div>
     </div>
   </section>
 );
@@ -358,20 +598,32 @@ const ShareYourGlowSection = () => (
 const CallToActionSection = () => (
   <section role="region" aria-labelledby="cta-heading" id="buy" className="container mx-auto px-4 md:px-8 py-24 flex flex-col items-center gap-8">
     <h2 id="cta-heading" className="text-3xl md:text-5xl font-serif-head font-bold text-gray-900 text-center">Ready for Glowing Skin & Lustrous Hair?</h2>
-    <button onClick={() => window.location.href='/products'} className="bg-rose-gold-500 hover:bg-rose-gold-600 text-white px-12 py-5 rounded-full text-xl font-semibold shadow-lg transition-all duration-300 w-full max-w-xs font-sans-body focus:outline-none focus:ring-4 focus:ring-rose-gold-300">Shop Now</button>
+    <CTAButton 
+      variant="primary" 
+      size="xl" 
+      icon="cart"
+      onClick={() => window.location.href='/products'}
+      className="w-full max-w-xs"
+    >
+      Shop Now
+    </CTAButton>
   </section>
 );
 
 // --- MOBILE STICKY CTA BUTTON ---
 const MobileStickyCTA = () => (
-  <button
-    onClick={() => window.location.href='/products'}
-    className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[90vw] max-w-md bg-rose-gold-600 hover:bg-rose-gold-700 text-white text-lg font-bold py-4 rounded-full shadow-lg transition-all duration-300 block md:hidden focus:outline-none focus:ring-4 focus:ring-rose-gold-300"
-    style={{ boxShadow: '0 4px 24px 0 rgba(0,0,0,0.10)' }}
-    aria-label="Shop Now"
-  >
-    Shop Now
-  </button>
+  <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[90vw] max-w-md block md:hidden">
+    <CTAButton 
+      variant="primary" 
+      size="lg"
+      icon="cart"
+      onClick={() => window.location.href='/products'}
+      className="w-full"
+      style={{ boxShadow: '0 4px 24px 0 rgba(0,0,0,0.10)' }}
+    >
+      Shop Now
+    </CTAButton>
+  </div>
 );
 
 // --- FAQ & TRUST SECTION ---
@@ -515,6 +767,8 @@ const AppContent = () => (
     {(scrollY) => (
       <>
         <HeroSection scrollY={scrollY} />
+        <IngredientsSection />
+        <AboutSection />
         <EditorialSection
           image={bOil5}
           alt="Woman holding BellaOil bottle"
@@ -535,6 +789,7 @@ const AppContent = () => (
         <FAQSection />
         <Footer />
         <MobileStickyCTA />
+        <FloatingCTA scrollY={scrollY} />
       </>
     )}
   </Layout>
