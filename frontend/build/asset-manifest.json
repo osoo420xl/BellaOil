@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/static/css/main.1ceb734f.css",
+    "main.js": "/static/js/main.7473a673.js",
+    "static/media/b-oil2.jpg": "/static/media/b-oil2.665e5bebecee3e5b60b6.jpg",
+    "static/media/b-oil4.jpg": "/static/media/b-oil4.099ebe8b4bf439a93512.jpg",
+    "static/media/b-oil3.jpg": "/static/media/b-oil3.0eadc0e69c265f21b17d.jpg",
+    "static/media/b-oil6.jpg": "/static/media/b-oil6.f64ba76d88bcae359d24.jpg",
+    "static/media/b-oil6.webp": "/static/media/b-oil6.f64ba76d88bcae359d24.webp",
+    "static/media/b-oil2.webp": "/static/media/b-oil2.e01930a629d72c17504f.webp",
+    "static/media/b-oil4.webp": "/static/media/b-oil4.b691fed06df66a461f1b.webp",
+    "static/media/b-oil5.jpg": "/static/media/b-oil5.2c0b4890d72d6929422d.jpg",
+    "static/media/b-oil5.webp": "/static/media/b-oil5.2c0b4890d72d6929422d.webp",
+    "static/media/b-oil3.webp": "/static/media/b-oil3.89b819152ac4a40b3727.webp",
+    "static/media/b-oil1.webp": "/static/media/b-oil1.503b8f82d24229b18a84.webp",
+    "static/media/b-oil1.jpg": "/static/media/b-oil1.7c0f8629c30bce12af2c.jpg",
+    "static/media/logo.png": "/static/media/logo.272956fc71070ab621f3.png",
+    "index.html": "/index.html",
+    "main.1ceb734f.css.map": "/static/css/main.1ceb734f.css.map",
+    "main.7473a673.js.map": "/static/js/main.7473a673.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1ceb734f.css",
+    "static/js/main.7473a673.js"
+  ]
+}
