@@ -566,6 +566,7 @@ html {
   transform: translateZ(0);
   backface-visibility: hidden;
   perspective: 1000px;
+<<<<<<< HEAD
 }
 
 .orbit-container {
@@ -622,4 +623,6 @@ html {
     max-width: 320px;
     height: 120px;
   }
+=======
+>>>>>>> d06a69ca2570e4658dfeaf7b495d5c104c8abb0b
 }
