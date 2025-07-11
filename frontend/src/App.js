@@ -18,6 +18,7 @@ import CTAButton from './components/CTAButton';
 import FloatingCTA from './components/FloatingCTA';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import logo from './logo.png';
+import { Helmet } from 'react-helmet';
 
 const PinkOrbs = ({ scrollY }) => (
   <>
@@ -409,8 +410,9 @@ const GallerySection = () => (
                   size="sm"
                   icon="cart"
                   className="flex-1"
+                  onClick={() => window.location.href='/products/bella-oil'}
                 >
-                  Shop Now
+                  Order Now
                 </CTAButton>
               </div>
             </div>
@@ -585,6 +587,7 @@ const CallToActionSection = () => (
     >
       Shop Now
     </CTAButton>
+    <div className="text-rose-gold-600 font-semibold text-center mt-4">Ships within Montenegro</div>
   </section>
 );
 
@@ -625,6 +628,10 @@ const faqs = [
   {
     q: 'How do I use BellaOil for best results?',
     a: 'Apply a few drops to clean skin or hair, massaging gently. Use daily for optimal hydration and shine.'
+  },
+  {
+    q: 'Where do you deliver?',
+    a: 'We deliver throughout Montenegro, including Ulcinj, Bar, Podgorica, and more.'
   }
 ];
 
@@ -736,6 +743,7 @@ const Footer = () => (
       </div>
     </div>
     <div className="mt-8 text-center text-white/70 font-sans-body text-sm">© {new Date().getFullYear()} BellaOil. All rights reserved.</div>
+    <span className="block text-white/80 text-xs mt-2">Proudly delivering to Ulcinj, Bar, Podgorica, and all of Montenegro</span>
   </footer>
 );
 
@@ -744,6 +752,19 @@ const AppContent = () => (
   <Layout>
     {(scrollY) => (
       <>
+        <Helmet>
+          <title>BellaOil - Natural Glow for Skin & Hair | Cold-Pressed Luxury Oil</title>
+          <meta name="description" content="BellaOil delivers radiant, natural beauty with cold-pressed oils and botanical ingredients. For glowing skin and luxurious hair. Montenegro delivery available." />
+          <meta property="og:title" content="BellaOil - Natural Glow for Skin & Hair | Cold-Pressed Luxury Oil" />
+          <meta property="og:description" content="BellaOil delivers radiant, natural beauty with cold-pressed oils and botanical ingredients. For glowing skin and luxurious hair. Montenegro delivery available." />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://bellaoil.onrender.com/" />
+          <meta property="og:image" content="/logo.png" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="BellaOil - Natural Glow for Skin & Hair | Cold-Pressed Luxury Oil" />
+          <meta name="twitter:description" content="BellaOil delivers radiant, natural beauty with cold-pressed oils and botanical ingredients. For glowing skin and luxurious hair. Montenegro delivery available." />
+          <meta name="twitter:image" content="/logo.png" />
+        </Helmet>
         <HeroSection scrollY={scrollY} />
         <IngredientsSection />
         <EditorialSection

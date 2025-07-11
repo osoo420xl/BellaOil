@@ -8,6 +8,7 @@ import bOil3 from './b-oil3.jpg';
 import bOil3Webp from './b-oil3.webp';
 import bOil4 from './b-oil4.jpg';
 import bOil4Webp from './b-oil4.webp';
+import { Helmet } from 'react-helmet';
 
 const ProductPage = ({ scrollY }) => {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -44,6 +45,36 @@ const ProductPage = ({ scrollY }) => {
 
   return (
     <div className="min-h-screen bg-[#FAF5F0] pt-24">
+      <Helmet>
+        <title>BellaOil Pure - Cold-Pressed Luxury Oil for Skin & Hair</title>
+        <meta name="description" content="BellaOil Pure delivers radiant, natural beauty with cold-pressed oils and botanicals. For glowing skin and luxurious hair. Montenegro delivery available." />
+        <meta property="og:title" content="BellaOil Pure - Cold-Pressed Luxury Oil for Skin & Hair" />
+        <meta property="og:description" content="BellaOil Pure delivers radiant, natural beauty with cold-pressed oils and botanicals. For glowing skin and luxurious hair. Montenegro delivery available." />
+        <meta property="og:type" content="product" />
+        <meta property="og:url" content="https://bellaoil.onrender.com/products/bella-oil" />
+        <meta property="og:image" content="/logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="BellaOil Pure - Cold-Pressed Luxury Oil for Skin & Hair" />
+        <meta name="twitter:description" content="BellaOil Pure delivers radiant, natural beauty with cold-pressed oils and botanicals. For glowing skin and luxurious hair. Montenegro delivery available." />
+        <meta name="twitter:image" content="/logo.png" />
+        <script type="application/ld+json">{`
+          {
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            "name": "BellaOil Pure",
+            "image": ["/logo.png"],
+            "description": "BellaOil Pure delivers radiant, natural beauty with cold-pressed oils and botanicals. For glowing skin and luxurious hair. Montenegro delivery available.",
+            "brand": { "@type": "Brand", "name": "BellaOil" },
+            "offers": {
+              "@type": "Offer",
+              "priceCurrency": "EUR",
+              "price": "34.99",
+              "availability": "https://schema.org/InStock",
+              "url": "https://bellaoil.onrender.com/products/bella-oil"
+            }
+          }
+        `}</script>
+      </Helmet>
       {/* Hero Section */}
       <div className="bg-gradient-to-br from-rose-gold-50 to-rose-gold-100 py-16">
         <div className="container mx-auto px-4">
@@ -124,13 +155,14 @@ const ProductPage = ({ scrollY }) => {
                 </span>
               </div>
               
-              <h1 className="text-4xl md:text-5xl font-serif-head font-bold text-gray-900 mb-4">
-                BellaOil Pure
-              </h1>
-              
-              <p className="text-xl text-gray-700 mb-6">
-                Pure, cold-pressed olive oil for glowing skin and lustrous hair
-              </p>
+              <h1 className="text-4xl md:text-5xl font-serif-head font-bold text-gray-900 mb-4">BellaOil Pure</h1>
+              <div className="mb-2 text-rose-gold-600 font-semibold">Ships within Montenegro (Ulcinj, Bar, Podgorica...)</div>
+              <div className="mb-4 flex items-center gap-2">
+                <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">Pay on Delivery</span>
+                <a href="https://wa.me/38267000000" target="_blank" rel="noopener noreferrer" className="ml-2 bg-rose-gold-500 text-white px-3 py-1 rounded-full text-sm font-semibold hover:bg-rose-gold-600 transition">Order via WhatsApp</a>
+                <a href="tel:+38267000000" className="ml-2 bg-rose-gold-100 text-rose-gold-700 px-3 py-1 rounded-full text-sm font-semibold hover:bg-rose-gold-200 transition">Call to Order</a>
+              </div>
+              <div className="mb-6 text-gray-700">To order: Select your size, quantity, and click "Order Now". We’ll confirm by phone or WhatsApp. Pay on delivery in Montenegro.</div>
               
               {starRating}
             </div>
