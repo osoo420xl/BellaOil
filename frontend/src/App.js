@@ -123,9 +123,9 @@ const AboutPage = () => (
 
 // --- HEADER ---
 const Logo = () => (
-  <div className="flex items-center gap-2 select-none">
+  <Link to="/" className="flex items-center gap-2 select-none hover:opacity-80 transition-opacity">
     <img src={logo} alt="BellaOil logo" className="h-15 w-auto object-contain" style={{maxHeight: '60px'}} />
-  </div>
+  </Link>
 );
 
 // --- CART CONTEXT ---

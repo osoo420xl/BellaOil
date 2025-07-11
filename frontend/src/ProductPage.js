@@ -106,7 +106,7 @@ const ProductPage = ({ scrollY }) => {
       {/* Customer Order Form - Glassmorphism Modal */}
       {showOrderForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-          <div className="bg-white/50 backdrop-blur-md rounded-3xl shadow-2xl border border-white/20 p-8 w-full max-w-md mx-4 relative">
+          <div className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8 w-full max-w-md mx-4 relative">
             <button 
               onClick={() => setShowOrderForm(false)}
               className="absolute top-4 right-4 text-gray-500 hover:text-rose-gold-500 text-2xl transition-colors"
