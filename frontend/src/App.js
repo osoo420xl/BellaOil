@@ -283,47 +283,51 @@ const StickyHeader = () => {
 };
 
 // --- HERO SECTION ---
-const HeroSection = ({ scrollY }) => (
-  <section role="region" aria-labelledby="hero-heading" className="relative flex flex-col md:flex-row items-center justify-center min-h-screen bg-[#FAF5F0] overflow-hidden pt-2 md:pt-4 pb-12 md:pb-0">
-    {/* Organic blob shapes */}
-    <div className="absolute top-0 left-0 w-80 h-80 bg-rose-gold-50 rounded-full blur-3xl opacity-60 -z-10" style={{ transform: `translateY(${scrollY * 0.08}px)` }} />
-    <div className="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-rose-gold-100 rounded-full blur-3xl opacity-40 -z-10" style={{ transform: `translateY(-${scrollY * 0.10}px)` }} />
-    {/* Product image with float animation, now matches all other images */}
-    <div className="flex-1 flex justify-center items-center">
-      <picture>
-        <source srcSet={bOil1Webp} type="image/webp" />
-        <img src={bOil1} alt="BellaOil product bottle" className="rounded-2xl shadow-lg max-w-sm md:max-w-lg w-full h-auto object-contain border-4 border-white levitate" />
-      </picture>
-    </div>
-    {/* Text content */}
-    <div className="flex-1 flex flex-col items-center md:items-start gap-8 px-4 md:px-16">
-      <div className="flex flex-col items-center md:items-start w-full gap-2">
-        <h1 id="hero-heading" className="text-5xl md:text-7xl font-serif-head font-bold text-gray-900 leading-tight text-center md:text-left mb-2">
-          Experience Unparalleled Radiance<br className="hidden md:block" /> with Nature’s Finest Oils
-        </h1>
-        {/* Review count and average rating */}
-        <div className="flex items-center gap-3 mb-2">
-          <span className="flex gap-1 text-yellow-400 text-2xl" aria-label="5 star rating">
-            <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
-          </span>
-          <span className="text-lg font-semibold text-gray-700">4.9/5.0</span>
-        </div>
+const HeroSection = ({ scrollY }) => {
+  const navigate = useNavigate();
+  
+  return (
+    <section role="region" aria-labelledby="hero-heading" className="relative flex flex-col md:flex-row items-center justify-center min-h-screen bg-[#FAF5F0] overflow-hidden pt-2 md:pt-4 pb-12 md:pb-0">
+      {/* Organic blob shapes */}
+      <div className="absolute top-0 left-0 w-80 h-80 bg-rose-gold-50 rounded-full blur-3xl opacity-60 -z-10" style={{ transform: `translateY(${scrollY * 0.08}px)` }} />
+      <div className="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-rose-gold-100 rounded-full blur-3xl opacity-40 -z-10" style={{ transform: `translateY(-${scrollY * 0.10}px)` }} />
+      {/* Product image with float animation, now matches all other images */}
+      <div className="flex-1 flex justify-center items-center">
+        <picture>
+          <source srcSet={bOil1Webp} type="image/webp" />
+          <img src={bOil1} alt="BellaOil product bottle" className="rounded-2xl shadow-lg max-w-sm md:max-w-lg w-full h-auto object-contain border-4 border-white levitate" />
+        </picture>
       </div>
-      <p className="text-xl text-gray-700 text-center md:text-left max-w-xl mb-4">
-        BellaOil delivers radiant, natural beauty with cold-pressed oils and botanical ingredients. For glowing skin and luxurious hair.
-      </p>
-      <CTAButton 
-        variant="primary" 
-        size="xl" 
-        icon="cart"
-        onClick={() => window.location.href='/products/bella-oil'}
-        className="w-full max-w-xs"
-      >
-        View Product
-      </CTAButton>
-    </div>
-  </section>
-);
+      {/* Text content */}
+      <div className="flex-1 flex flex-col items-center md:items-start gap-8 px-4 md:px-16">
+        <div className="flex flex-col items-center md:items-start w-full gap-2">
+          <h1 id="hero-heading" className="text-5xl md:text-7xl font-serif-head font-bold text-gray-900 leading-tight text-center md:text-left mb-2">
+            Experience Unparalleled Radiance<br className="hidden md:block" /> with Nature's Finest Oils
+          </h1>
+          {/* Review count and average rating */}
+          <div className="flex items-center gap-3 mb-2">
+            <span className="flex gap-1 text-yellow-400 text-2xl" aria-label="5 star rating">
+              <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
+            </span>
+            <span className="text-lg font-semibold text-gray-700">4.9/5.0</span>
+          </div>
+        </div>
+        <p className="text-xl text-gray-700 text-center md:text-left max-w-xl mb-4">
+          BellaOil delivers radiant, natural beauty with cold-pressed oils and botanical ingredients. For glowing skin and luxurious hair.
+        </p>
+        <CTAButton 
+          variant="primary" 
+          size="xl" 
+          icon="cart"
+          onClick={() => navigate('/products/bella-oil')}
+          className="w-full max-w-xs"
+        >
+          View Product
+        </CTAButton>
+      </div>
+    </section>
+  );
+};
 
 // --- INGREDIENTS SECTION ---
 const IngredientsSection = () => (
@@ -473,44 +477,49 @@ const EditorialSection = ({ image, alt, title, text, reverse, children }) => (
 );
 
 // --- GALLERY SECTION ---
-const GallerySection = () => (
-  <section role="region" aria-labelledby="gallery-heading" className="container mx-auto px-4 md:px-8 py-24">
-    <h2 id="gallery-heading" className="text-3xl md:text-5xl font-serif-head font-bold text-gray-900 text-center mb-20">BellaOil in Real Life</h2>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-      {[
-        { image: bOil1, webp: bOil1Webp, alt: "BellaOil bottle", title: "Pure Radiance" },
-        { image: bOil2, webp: bOil2Webp, alt: "Lifestyle with BellaOil", title: "Natural Glow" },
-        { image: bOil3, webp: bOil3Webp, alt: "BellaOil on minimal background", title: "Deep Hydration" },
-        { image: bOil4, webp: bOil4Webp, alt: "Glowing skin and hair", title: "Lustrous Hair" },
-        { image: bOil6, webp: bOil6Webp, alt: "BellaOil lifestyle", title: "Skin & Hair" }
-      ].map((item, index) => (
-        <div key={index} className="group relative overflow-hidden rounded-2xl shadow-lg border-4 border-white transition-transform duration-300 hover:-translate-y-2 bg-white">
-          <picture>
-            <source srcSet={item.webp} type="image/webp" />
-            <img src={item.image} alt={item.alt} loading="lazy" className="w-full h-[384px] object-cover object-center" />
-          </picture>
-          {/* Overlay with CTA */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-            <div className="p-4 w-full">
-              <h3 className="text-white font-bold text-lg mb-2">{item.title}</h3>
-              <div className="flex gap-2">
-                <CTAButton 
-                  variant="primary" 
-                  size="sm"
-                  icon="cart"
-                  className="flex-1"
-                  onClick={() => window.location.href='/products/bella-oil'}
-                >
-                  Order Now
-                </CTAButton>
+const GallerySection = () => {
+  const navigate = useNavigate();
+  
+  return (
+    <section role="region" aria-labelledby="gallery-heading" className="container mx-auto px-4 md:px-8 py-20">
+      <h2 id="gallery-heading" className="text-3xl md:text-5xl font-serif-head font-bold text-gray-900 text-center mb-12">Discover BellaOil</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {[
+          { image: bOil1, webp: bOil1Webp, alt: "BellaOil product showcase", title: "Pure Natural Beauty" },
+          { image: bOil2, webp: bOil2Webp, alt: "BellaOil lifestyle", title: "Glowing Results" },
+          { image: bOil3, webp: bOil3Webp, alt: "BellaOil close-up", title: "Premium Quality" },
+          { image: bOil4, webp: bOil4Webp, alt: "BellaOil packaging", title: "Luxury Experience" },
+          { image: bOil5, webp: bOil5Webp, alt: "BellaOil application", title: "Easy Application" },
+          { image: bOil6, webp: bOil6Webp, alt: "BellaOil results", title: "Visible Results" }
+        ].map((item, index) => (
+          <div key={index} className="group relative overflow-hidden rounded-2xl shadow-lg border-4 border-white transition-transform duration-300 hover:-translate-y-2 bg-white">
+            <picture>
+              <source srcSet={item.webp} type="image/webp" />
+              <img src={item.image} alt={item.alt} loading="lazy" className="w-full h-[384px] object-cover object-center" />
+            </picture>
+            {/* Overlay with CTA */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+              <div className="p-4 w-full">
+                <h3 className="text-white font-bold text-lg mb-2">{item.title}</h3>
+                <div className="flex gap-2">
+                  <CTAButton 
+                    variant="primary" 
+                    size="sm"
+                    icon="cart"
+                    className="flex-1"
+                    onClick={() => navigate('/products/bella-oil')}
+                  >
+                    Order Now
+                  </CTAButton>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      ))}
-    </div>
-  </section>
-);
+        ))}
+      </div>
+    </section>
+  );
+};
 
 // --- TESTIMONIALS (colored circles instead of images) ---
 const starIcons = (
@@ -519,181 +528,162 @@ const starIcons = (
   </span>
 );
 
-const TestimonialsSection = () => (
-  <section role="region" aria-labelledby="testimonials-heading" id="testimonials" className="container mx-auto px-4 md:px-8 py-24">
-    <h2 id="testimonials-heading" className="text-3xl md:text-5xl font-serif-head font-bold text-gray-900 text-center mb-12">What Our Customers Say</h2>
-    <div className="flex flex-col md:flex-row gap-12 justify-center items-stretch flex-wrap">
-      <div className="flex-1 bg-white rounded-3xl shadow-xl p-10 flex flex-col items-center text-center gap-6 border border-rose-gold-50 min-w-[260px] max-w-sm mx-auto">
-        {/* Optionally add before/after image or video here */}
-        <span className="w-[100px] h-[100px] rounded-full bg-rose-gold-200 inline-block" />
-        {starIcons}
-        <p className="text-xl text-gray-700 italic font-sans-body">“I use BellaOil for both my hair and skin—my curls are shiny and my face glows!”</p>
-        <span className="flex items-center gap-2 text-rose-gold-400 font-semibold font-serif-head text-lg">
-          <FaCheckCircle className="text-green-400" /> Verified Buyer
-        </span>
-        <span className="text-rose-gold-400 font-semibold font-serif-head text-lg">Sophie L.</span>
+const TestimonialsSection = () => {
+  const navigate = useNavigate();
+  
+  return (
+    <section role="region" aria-labelledby="testimonials-heading" className="container mx-auto px-4 md:px-8 py-20">
+      <h2 id="testimonials-heading" className="text-3xl md:text-5xl font-serif-head font-bold text-gray-900 text-center mb-12">What Our Customers Say</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        {testimonials.map((testimonial, index) => (
+          <div key={index} className="bg-white rounded-3xl p-8 shadow-lg border border-rose-gold-50 text-center">
+            <div className="w-16 h-16 bg-rose-gold-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <FaQuoteLeft className="text-2xl text-rose-gold-600" />
+            </div>
+            <p className="text-gray-700 font-sans-body mb-6 leading-relaxed">"{testimonial.quote}"</p>
+            <div className="flex items-center justify-center gap-2 mb-3">
+              {starIcons}
+            </div>
+            <p className="font-semibold text-gray-900">{testimonial.name}</p>
+          </div>
+        ))}
       </div>
-      <div className="flex-1 bg-white rounded-3xl shadow-xl p-10 flex flex-col items-center text-center gap-6 border border-rose-gold-50 min-w-[260px] max-w-sm mx-auto">
-        {/* Optionally add before/after image or video here */}
-        <span className="w-[100px] h-[100px] rounded-full bg-rose-gold-300 inline-block" />
-        {starIcons}
-        <p className="text-xl text-gray-700 italic font-sans-body">“Finally, a product that’s truly natural and works for my sensitive scalp and skin.”</p>
-        <span className="flex items-center gap-2 text-rose-gold-400 font-semibold font-serif-head text-lg">
-          <FaCheckCircle className="text-green-400" /> Verified Buyer
-        </span>
-        <span className="text-rose-gold-400 font-semibold font-serif-head text-lg">Emily R.</span>
+      
+      {/* Trust badges */}
+      <div className="flex flex-wrap justify-center items-center gap-8 mt-16 border-t border-rose-gold-100 pt-10">
+        <div className="flex flex-col items-center">
+          <FaRegGem className="text-2xl text-rose-gold-400 mb-1" />
+          <span className="text-xs font-semibold text-gray-700">100% Money-Back Guarantee</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <FaRegClock className="text-2xl text-rose-gold-400 mb-1" />
+          <span className="text-xs font-semibold text-gray-700">Fast Shipping</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <FaSpa className="text-2xl text-rose-gold-400 mb-1" />
+          <span className="text-xs font-semibold text-gray-700">Clean Ingredients</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <FaSmile className="text-2xl text-rose-gold-400 mb-1" />
+          <span className="text-xs font-semibold text-gray-700">Dermatologist Approved</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <FaLeaf className="text-2xl text-rose-gold-400 mb-1" />
+          <span className="text-xs font-semibold text-gray-700">Cruelty-Free</span>
+        </div>
       </div>
-      <div className="flex-1 bg-white rounded-3xl shadow-xl p-10 flex flex-col items-center text-center gap-6 border border-rose-gold-50 min-w-[260px] max-w-sm mx-auto">
-        {/* Optionally add before/after image or video here */}
-        <span className="w-[100px] h-[100px] rounded-full bg-rose-gold-400 inline-block" />
-        {starIcons}
-        <p className="text-xl text-gray-700 italic font-sans-body">“My hair is softer, my skin is smoother, and I love that it’s all-natural.”</p>
-        <span className="flex items-center gap-2 text-rose-gold-400 font-semibold font-serif-head text-lg">
-          <FaCheckCircle className="text-green-400" /> Verified Buyer
-        </span>
-        <span className="text-rose-gold-400 font-semibold font-serif-head text-lg">Jasmine K.</span>
+      
+      {/* Enhanced CTA after testimonials */}
+      <div className="mt-12 text-center">
+        <CTAButton 
+          variant="primary" 
+          size="lg"
+          icon="cart"
+          onClick={() => navigate('/products/bella-oil')}
+          className="mx-auto"
+        >
+          Join Our Happy Customers
+        </CTAButton>
       </div>
-      <div className="flex-1 bg-white rounded-3xl shadow-xl p-10 flex flex-col items-center text-center gap-6 border border-rose-gold-50 min-w-[260px] max-w-sm mx-auto">
-        {/* Optionally add before/after image or video here */}
-        <span className="w-[100px] h-[100px] rounded-full bg-rose-gold-100 inline-block" />
-        {starIcons}
-        <p className="text-xl text-gray-700 italic font-sans-body">“I’ve noticed a huge difference in my skin’s hydration. The oil absorbs quickly and doesn’t feel greasy!”</p>
-        <span className="flex items-center gap-2 text-rose-gold-400 font-semibold font-serif-head text-lg">
-          <FaCheckCircle className="text-green-400" /> Verified Buyer
-        </span>
-        <span className="text-rose-gold-400 font-semibold font-serif-head text-lg">Maya T.</span>
+    </section>
+  );
+};
+
+// --- UGC / SOCIAL PROOF SECTION ---
+const ShareYourGlowSection = () => {
+  const navigate = useNavigate();
+  
+  return (
+    <section role="region" aria-labelledby="share-glow-heading" className="container mx-auto px-4 md:px-8 py-20">
+      <h2 id="share-glow-heading" className="text-3xl md:text-5xl font-serif-head font-bold text-gray-900 text-center mb-6">Share Your Glow</h2>
+      <p className="text-lg text-gray-700 text-center mb-8 font-sans-body">Tag <span className="font-semibold text-rose-gold-500">@BellaOil</span> or use <span className="font-semibold text-rose-gold-500">#BellaOilGlow</span> on Instagram for a chance to be featured!</p>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-8">
+        <picture>
+          <source srcSet={bOil1Webp} type="image/webp" />
+          <img src={bOil1} alt="UGC 1" loading="lazy" className="rounded-2xl shadow-md w-full h-40 md:h-56 object-cover object-center border-4 border-white" />
+        </picture>
+        <picture>
+          <source srcSet={bOil2Webp} type="image/webp" />
+          <img src={bOil2} alt="UGC 2" loading="lazy" className="rounded-2xl shadow-md w-full h-40 md:h-56 object-cover object-center border-4 border-white" />
+        </picture>
+        <picture>
+          <source srcSet={bOil3Webp} type="image/webp" />
+          <img src={bOil3} alt="UGC 3" loading="lazy" className="rounded-2xl shadow-md w-full h-40 md:h-56 object-cover object-center border-4 border-white" />
+        </picture>
+        <picture>
+          <source srcSet={bOil4Webp} type="image/webp" />
+          <img src={bOil4} alt="UGC 4" loading="lazy" className="rounded-2xl shadow-md w-full h-40 md:h-56 object-cover object-center border-4 border-white" />
+        </picture>
       </div>
-      <div className="flex-1 bg-white rounded-3xl shadow-xl p-10 flex flex-col items-center text-center gap-6 border border-rose-gold-50 min-w-[260px] max-w-sm mx-auto">
-        {/* Optionally add before/after image or video here */}
-        <span className="w-[100px] h-[100px] rounded-full bg-rose-gold-50 inline-block" />
-        {starIcons}
-        <p className="text-xl text-gray-700 italic font-sans-body">“I love that BellaOil is cruelty-free and made with clean ingredients. My whole family uses it now!”</p>
-        <span className="flex items-center gap-2 text-rose-gold-400 font-semibold font-serif-head text-lg">
-          <FaCheckCircle className="text-green-400" /> Verified Buyer
-        </span>
-        <span className="text-rose-gold-400 font-semibold font-serif-head text-lg">Alex P.</span>
+      
+      <div className="text-center space-y-4">
+        <CTAButton 
+          variant="primary" 
+          size="lg"
+          onClick={() => window.open('https://instagram.com/bellaoil', '_blank')}
+        >
+          Follow us on Instagram
+        </CTAButton>
+        <div className="flex justify-center gap-4">
+          <CTAButton 
+            variant="secondary" 
+            size="md"
+            icon="cart"
+            onClick={() => navigate('/products/bella-oil')}
+          >
+            Shop BellaOil
+          </CTAButton>
+          <CTAButton 
+            variant="outline" 
+            size="md"
+          >
+            Share Your Story
+          </CTAButton>
+        </div>
       </div>
-    </div>
-    <div className="flex flex-wrap justify-center items-center gap-8 mt-16 border-t border-rose-gold-100 pt-10">
-      <div className="flex flex-col items-center">
-        <FaRegGem className="text-2xl text-rose-gold-400 mb-1" />
-        <span className="text-xs font-semibold text-gray-700">100% Money-Back Guarantee</span>
-      </div>
-      <div className="flex flex-col items-center">
-        <FaRegClock className="text-2xl text-rose-gold-400 mb-1" />
-        <span className="text-xs font-semibold text-gray-700">Fast Shipping</span>
-      </div>
-      <div className="flex flex-col items-center">
-        <FaSpa className="text-2xl text-rose-gold-400 mb-1" />
-        <span className="text-xs font-semibold text-gray-700">Clean Ingredients</span>
-      </div>
-      <div className="flex flex-col items-center">
-        <FaSmile className="text-2xl text-rose-gold-400 mb-1" />
-        <span className="text-xs font-semibold text-gray-700">Dermatologist Approved</span>
-      </div>
-      <div className="flex flex-col items-center">
-        <FaLeaf className="text-2xl text-rose-gold-400 mb-1" />
-        <span className="text-xs font-semibold text-gray-700">Cruelty-Free</span>
-      </div>
-    </div>
-    
-    {/* Enhanced CTA after testimonials */}
-    <div className="mt-12 text-center">
+    </section>
+  );
+};
+
+// --- CTA (spacious, minimal) ---
+const CallToActionSection = () => {
+  const navigate = useNavigate();
+  
+  return (
+    <section role="region" aria-labelledby="cta-heading" id="buy" className="container mx-auto px-4 md:px-8 py-24 flex flex-col items-center gap-8">
+      <h2 id="cta-heading" className="text-3xl md:text-5xl font-serif-head font-bold text-gray-900 text-center">Ready for Glowing Skin & Lustrous Hair?</h2>
+      <CTAButton 
+        variant="primary" 
+        size="xl" 
+        icon="cart"
+        onClick={() => navigate('/products/bella-oil')}
+        className="w-full max-w-xs"
+      >
+        Shop Now
+      </CTAButton>
+    </section>
+  );
+};
+
+// --- MOBILE STICKY CTA BUTTON ---
+const MobileStickyCTA = () => {
+  const navigate = useNavigate();
+  
+  return (
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[90vw] max-w-md block md:hidden">
       <CTAButton 
         variant="primary" 
         size="lg"
         icon="cart"
-        onClick={() => window.location.href='/products/bella-oil'}
-        className="mx-auto"
+        onClick={() => navigate('/products/bella-oil')}
+        className="w-full"
+        style={{ boxShadow: '0 4px 24px 0 rgba(0,0,0,0.10)' }}
       >
-        Join Our Happy Customers
+        Shop Now
       </CTAButton>
     </div>
-  </section>
-);
-
-// --- UGC / SOCIAL PROOF SECTION ---
-const ShareYourGlowSection = () => (
-  <section role="region" aria-labelledby="share-glow-heading" className="container mx-auto px-4 md:px-8 py-20">
-    <h2 id="share-glow-heading" className="text-3xl md:text-5xl font-serif-head font-bold text-gray-900 text-center mb-6">Share Your Glow</h2>
-    <p className="text-lg text-gray-700 text-center mb-8 font-sans-body">Tag <span className="font-semibold text-rose-gold-500">@BellaOil</span> or use <span className="font-semibold text-rose-gold-500">#BellaOilGlow</span> on Instagram for a chance to be featured!</p>
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-8">
-      <picture>
-        <source srcSet={bOil1Webp} type="image/webp" />
-        <img src={bOil1} alt="UGC 1" loading="lazy" className="rounded-2xl shadow-md w-full h-40 md:h-56 object-cover object-center border-4 border-white" />
-      </picture>
-      <picture>
-        <source srcSet={bOil2Webp} type="image/webp" />
-        <img src={bOil2} alt="UGC 2" loading="lazy" className="rounded-2xl shadow-md w-full h-40 md:h-56 object-cover object-center border-4 border-white" />
-      </picture>
-      <picture>
-        <source srcSet={bOil3Webp} type="image/webp" />
-        <img src={bOil3} alt="UGC 3" loading="lazy" className="rounded-2xl shadow-md w-full h-40 md:h-56 object-cover object-center border-4 border-white" />
-      </picture>
-      <picture>
-        <source srcSet={bOil4Webp} type="image/webp" />
-        <img src={bOil4} alt="UGC 4" loading="lazy" className="rounded-2xl shadow-md w-full h-40 md:h-56 object-cover object-center border-4 border-white" />
-      </picture>
-    </div>
-    <div className="text-center space-y-4">
-      <CTAButton 
-        variant="primary" 
-        size="lg"
-        onClick={() => window.open('https://instagram.com/bellaoil', '_blank')}
-      >
-        Follow us on Instagram
-      </CTAButton>
-      <div className="flex justify-center gap-4">
-        <CTAButton 
-          variant="secondary" 
-          size="md"
-          icon="cart"
-          onClick={() => window.location.href='/products/bella-oil'}
-        >
-          Shop BellaOil
-        </CTAButton>
-        <CTAButton 
-          variant="outline" 
-          size="md"
-        >
-          Share Your Story
-        </CTAButton>
-      </div>
-    </div>
-  </section>
-);
-
-// --- CTA (spacious, minimal) ---
-const CallToActionSection = () => (
-  <section role="region" aria-labelledby="cta-heading" id="buy" className="container mx-auto px-4 md:px-8 py-24 flex flex-col items-center gap-8">
-    <h2 id="cta-heading" className="text-3xl md:text-5xl font-serif-head font-bold text-gray-900 text-center">Ready for Glowing Skin & Lustrous Hair?</h2>
-    <CTAButton 
-      variant="primary" 
-      size="xl" 
-      icon="cart"
-      onClick={() => window.location.href='/products/bella-oil'}
-      className="w-full max-w-xs"
-    >
-      Shop Now
-    </CTAButton>
-  </section>
-);
-
-// --- MOBILE STICKY CTA BUTTON ---
-const MobileStickyCTA = () => (
-  <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[90vw] max-w-md block md:hidden">
-    <CTAButton 
-      variant="primary" 
-      size="lg"
-      icon="cart"
-      onClick={() => window.location.href='/products/bella-oil'}
-      className="w-full"
-      style={{ boxShadow: '0 4px 24px 0 rgba(0,0,0,0.10)' }}
-    >
-      Shop Now
-    </CTAButton>
-  </div>
-);
+  );
+};
 
 // --- FAQ & TRUST SECTION ---
 const faqs = [

@@ -1,58 +1,70 @@
 import React, { useState, useEffect } from 'react';
-import { FaShoppingCart, FaHeart, FaStar, FaTimes, FaGift, FaTruck } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import CTAButton from './CTAButton';
+import { FaStar, FaHeart, FaShoppingCart } from 'react-icons/fa';
 
 const FloatingCTA = ({ scrollY }) => {
-  const [isVisible, setIsVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsVisible(scrollY > 300);
+      const scrollPosition = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      
+      // Show after scrolling 50% of viewport height
+      if (scrollPosition > windowHeight * 0.5 && scrollPosition < documentHeight - windowHeight - 100) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
     };
-    handleScroll();
-  }, [scrollY]);
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   if (!isVisible) return null;
 
   return (
     <>
-      {/* Floating CTA Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 transform transition-transform duration-500">
-        <div className="bg-white border-t-2 border-rose-gold-100 shadow-2xl">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-between">
-              {/* Product Info */}
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-rose-gold-100 to-rose-gold-200 rounded-full flex items-center justify-center">
-                  <FaStar className="text-rose-gold-600 text-lg" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-gray-900">BellaOil Pure</h3>
-                  <p className="text-sm text-gray-600">4.9 ★ (1,284 reviews)</p>
-                </div>
+      {/* Compact CTA */}
+      <div className="fixed bottom-4 right-4 z-50 hidden md:block">
+        <div className="bg-white rounded-2xl shadow-2xl border border-rose-gold-100 p-4 max-w-sm">
+          <div className="flex items-center justify-between">
+            {/* Product Info */}
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-rose-gold-100 to-rose-gold-200 rounded-full flex items-center justify-center">
+                <FaStar className="text-rose-gold-600 text-lg" />
               </div>
+              <div>
+                <h3 className="font-bold text-gray-900">BellaOil Pure</h3>
+                <p className="text-sm text-gray-600">4.9 ★ (1,284 reviews)</p>
+              </div>
+            </div>
 
-              {/* CTA Buttons */}
-              <div className="flex items-center gap-3">
-                <CTAButton 
-                  variant="ghost" 
-                  size="sm"
-                  onClick={() => setIsExpanded(!isExpanded)}
-                  className="hidden md:flex"
-                >
-                  <FaHeart className="mr-2" />
-                  Wishlist
-                </CTAButton>
-                
-                <CTAButton 
-                  variant="primary" 
-                  size="sm"
-                  icon="cart"
-                >
-                  Add to Cart - $34.99
-                </CTAButton>
-              </div>
+            {/* CTA Buttons */}
+            <div className="flex items-center gap-3">
+              <CTAButton 
+                variant="ghost" 
+                size="sm"
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="hidden md:flex"
+              >
+                <FaHeart className="mr-2" />
+                Wishlist
+              </CTAButton>
+              
+              <CTAButton 
+                variant="primary" 
+                size="sm"
+                icon="cart"
+                onClick={() => navigate('/products/bella-oil')}
+              >
+                Add to Cart - $34.99
+              </CTAButton>
             </div>
           </div>
         </div>
@@ -60,90 +72,44 @@ const FloatingCTA = ({ scrollY }) => {
 
       {/* Expanded CTA Panel */}
       {isExpanded && (
-        <div className="fixed bottom-20 left-0 right-0 z-40 bg-white border-t-2 border-rose-gold-100 shadow-2xl">
-          <div className="container mx-auto px-4 py-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-gray-900">Complete Your Order</h3>
-              <button 
-                onClick={() => setIsExpanded(false)}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-              >
-                <FaTimes className="text-gray-500" />
-              </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md mx-4 relative">
+            <button 
+              onClick={() => setIsExpanded(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            >
+              ✕
+            </button>
+            
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">BellaOil Pure</h3>
+              <p className="text-gray-600 mb-4">Cold-pressed luxury oil for skin & hair</p>
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <FaStar className="text-yellow-400" />
+                <span className="font-semibold">4.9/5.0</span>
+                <span className="text-gray-500">(1,284 reviews)</span>
+              </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Size Selection */}
-              <div className="bg-gray-50 rounded-2xl p-4">
-                <h4 className="font-semibold text-gray-900 mb-3">Choose Size</h4>
-                <div className="space-y-2">
-                  {[
-                    { size: '30ml', price: 24.99 },
-                    { size: '50ml', price: 34.99, popular: true },
-                    { size: '100ml', price: 59.99, savings: 15 }
-                  ].map((option) => (
-                    <button
-                      key={option.size}
-                      className={`w-full p-3 rounded-xl text-left transition-all ${
-                        option.popular 
-                          ? 'bg-rose-gold-500 text-white' 
-                          : 'bg-white hover:bg-rose-gold-50'
-                      }`}
-                    >
-                      <div className="flex justify-between items-center">
-                        <span className="font-semibold">{option.size}</span>
-                        <span>${option.price}</span>
-                      </div>
-                      {option.savings && (
-                        <span className="text-xs text-green-600">Save ${option.savings}</span>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Special Offers */}
-              <div className="bg-gradient-to-br from-rose-gold-50 to-rose-gold-100 rounded-2xl p-4">
-                <h4 className="font-semibold text-gray-900 mb-3">Special Offers</h4>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm">
-                    <FaGift className="text-rose-gold-600" />
-                    <span>Free shipping on orders over $50</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <FaTruck className="text-rose-gold-600" />
-                    <span>2-3 day delivery</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <FaStar className="text-rose-gold-600" />
-                    <span>30-day money-back guarantee</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick Actions */}
-              <div className="space-y-3">
-                <CTAButton 
-                  variant="primary" 
-                  size="lg"
-                  icon="cart"
-                  className="w-full"
-                >
-                  Buy Now - $34.99
-                </CTAButton>
-                
-                <CTAButton 
-                  variant="secondary" 
-                  size="lg"
-                  className="w-full"
-                >
-                  Add to Cart
-                </CTAButton>
-                
-                <button className="w-full text-center text-sm text-gray-600 hover:text-rose-gold-600 transition-colors">
-                  Continue Shopping
-                </button>
-              </div>
+            <div className="space-y-4">
+              <CTAButton 
+                variant="primary" 
+                size="lg"
+                icon="cart"
+                onClick={() => navigate('/products/bella-oil')}
+                className="w-full"
+              >
+                View Product - $34.99
+              </CTAButton>
+              
+              <CTAButton 
+                variant="outline" 
+                size="lg"
+                onClick={() => setIsExpanded(false)}
+                className="w-full"
+              >
+                Continue Shopping
+              </CTAButton>
             </div>
           </div>
         </div>
