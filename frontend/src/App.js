@@ -12,13 +12,14 @@ import bOil3Webp from './b-oil3.webp';
 import bOil4Webp from './b-oil4.webp';
 import bOil5Webp from './b-oil5.webp';
 import bOil6Webp from './b-oil6.webp';
-import { FaLeaf, FaRegGem, FaTint, FaStar, FaQuoteLeft, FaCheckCircle, FaRegClock, FaSpa, FaSmile, FaSearch } from 'react-icons/fa';
+import { FaLeaf, FaRegGem, FaTint, FaStar, FaQuoteLeft, FaCheckCircle, FaRegClock, FaSpa, FaSmile, FaSearch, FaShoppingCart } from 'react-icons/fa';
 import ProductPage from './ProductPage';
 import CTAButton from './components/CTAButton';
 import FloatingCTA from './components/FloatingCTA';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import logo from './logo.png';
 import { Helmet } from 'react-helmet';
+import { createContext, useContext } from 'react';
 
 const PinkOrbs = ({ scrollY }) => (
   <>
@@ -90,6 +91,36 @@ const dualUse = [
   },
 ];
 
+// --- INGREDIENTS PAGE ---
+const IngredientsPage = () => (
+  <Layout>
+    {() => (
+      <div className="pt-24 min-h-screen bg-[#FAF5F0]">
+        <Helmet>
+          <title>Ingredients | BellaOil</title>
+          <meta name="description" content="Discover the pure, natural ingredients in BellaOil. Cold-pressed olive oil and botanicals for radiant skin and hair." />
+        </Helmet>
+        <IngredientsSection />
+      </div>
+    )}
+  </Layout>
+);
+
+// --- ABOUT PAGE ---
+const AboutPage = () => (
+  <Layout>
+    {() => (
+      <div className="pt-24 min-h-screen bg-[#FAF5F0]">
+        <Helmet>
+          <title>About | BellaOil</title>
+          <meta name="description" content="Learn about BellaOil's story, mission, and commitment to natural beauty and wellness." />
+        </Helmet>
+        <AboutSection />
+      </div>
+    )}
+  </Layout>
+);
+
 // --- HEADER ---
 const Logo = () => (
   <div className="flex items-center gap-2 select-none">
@@ -97,9 +128,83 @@ const Logo = () => (
   </div>
 );
 
+// --- CART CONTEXT ---
+const CartContext = createContext();
+const useCart = () => useContext(CartContext);
+
+const CartProvider = ({ children }) => {
+  const [cart, setCart] = useState([]);
+  const [cartOpen, setCartOpen] = useState(false);
+
+  const addToCart = (item) => {
+    setCart((prev) => {
+      // If item with same id and size exists, increase quantity
+      const existing = prev.find(
+        (i) => i.id === item.id && i.size === item.size
+      );
+      if (existing) {
+        return prev.map((i) =>
+          i.id === item.id && i.size === item.size
+            ? { ...i, quantity: i.quantity + item.quantity }
+            : i
+        );
+      }
+      return [...prev, item];
+    });
+  };
+
+  const removeFromCart = (index) => {
+    setCart((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const clearCart = () => setCart([]);
+
+  return (
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, cartOpen, setCartOpen }}>
+      {children}
+    </CartContext.Provider>
+  );
+};
+
+// --- CART MODAL ---
+const CartModal = () => {
+  const { cart, removeFromCart, clearCart, cartOpen, setCartOpen } = useCart();
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  return cartOpen ? (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md relative">
+        <button className="absolute top-4 right-4 text-gray-500 hover:text-rose-gold-500 text-2xl" onClick={() => setCartOpen(false)}>&times;</button>
+        <h2 className="text-2xl font-bold mb-4 text-gray-900">Your Cart</h2>
+        {cart.length === 0 ? (
+          <div className="text-gray-600">Your cart is empty.</div>
+        ) : (
+          <>
+            <ul className="divide-y divide-gray-100 mb-4">
+              {cart.map((item, idx) => (
+                <li key={idx} className="py-3 flex items-center justify-between gap-2">
+                  <div>
+                    <div className="font-semibold text-gray-900">{item.name}</div>
+                    <div className="text-sm text-gray-600">{item.size} &times; {item.quantity}</div>
+                  </div>
+                  <div className="font-semibold text-gray-900">€{(item.price * item.quantity).toFixed(2)}</div>
+                  <button className="text-rose-gold-500 hover:text-rose-gold-700 ml-2" onClick={() => removeFromCart(idx)}>Remove</button>
+                </li>
+              ))}
+            </ul>
+            <div className="font-bold text-lg mb-4">Total: €{total.toFixed(2)}</div>
+            <button className="w-full bg-rose-gold-600 hover:bg-rose-gold-700 text-white py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-300 mb-2" onClick={clearCart}>Clear Cart</button>
+            <button className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-300" disabled>Checkout (Coming Soon)</button>
+          </>
+        )}
+      </div>
+    </div>
+  ) : null;
+};
+
 const StickyHeader = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { cart, setCartOpen } = useCart();
   
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -137,15 +242,17 @@ const StickyHeader = () => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex gap-8 text-gray-900 text-lg font-sans-body">
           <Link to="/" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">Home</Link>
-          <Link to="/products" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">Products</Link>
-          <a href="#ingredients" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">Ingredients</a>
-          <a href="#about" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">About</a>
-          <a href="#testimonials" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">Reviews</a>
-          <a href="#contact" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">Contact</a>
+          <Link to="/products/bella-oil" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">Product</Link>
+          <Link to="/ingredients" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">Ingredients</Link>
+          <Link to="/about" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors">About</Link>
         </nav>
         
         <div className="hidden md:flex items-center gap-4">
-          <button onClick={() => window.location.href='/products'} className="bg-rose-gold-500 hover:bg-rose-gold-600 text-white px-6 py-2 rounded-full font-semibold shadow transition-all duration-300 text-base font-sans-body">Shop Now</button>
+          {/* Cart Icon */}
+          <button onClick={() => setCartOpen(true)} className="relative p-2 text-rose-gold-600 hover:text-rose-gold-800 transition-colors" aria-label="Open cart">
+            <FaShoppingCart className="text-2xl" />
+            {cart.length > 0 && <span className="absolute -top-1 -right-1 bg-rose-gold-500 text-white text-xs rounded-full px-2 py-0.5 font-bold">{cart.length}</span>}
+          </button>
         </div>
       </div>
       
@@ -161,12 +268,13 @@ const StickyHeader = () => {
           {/* Mobile Navigation */}
           <nav className="flex flex-col gap-4 text-gray-900 text-lg font-sans-body">
             <Link to="/" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-            <Link to="/products" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Products</Link>
-            <a href="#ingredients" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Ingredients</a>
-            <a href="#about" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>About</a>
-            <a href="#testimonials" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Reviews</a>
-            <a href="#contact" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Contact</a>
-            <button onClick={() => {window.location.href='/products'; setMobileMenuOpen(false);}} className="bg-rose-gold-500 hover:bg-rose-gold-600 text-white px-6 py-3 rounded-full font-semibold shadow transition-all duration-300 text-base font-sans-body w-full mt-4">Shop Now</button>
+            <Link to="/products/bella-oil" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Product</Link>
+            <Link to="/ingredients" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Ingredients</Link>
+            <Link to="/about" className="hover:text-rose-gold-300 focus:text-rose-gold-400 transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>About</Link>
+            {/* Cart Icon in mobile menu */}
+            <button onClick={() => { setCartOpen(true); setMobileMenuOpen(false); }} className="flex items-center gap-2 text-rose-gold-600 hover:text-rose-gold-800 transition-colors py-2">
+              <FaShoppingCart className="text-xl" /> Cart{cart.length > 0 && <span className="bg-rose-gold-500 text-white text-xs rounded-full px-2 py-0.5 font-bold">{cart.length}</span>}
+            </button>
           </nav>
         </div>
       )}
@@ -174,7 +282,7 @@ const StickyHeader = () => {
   );
 };
 
-// --- HERO SECTION (reduce top padding, increase image container height by 30%) ---
+// --- HERO SECTION ---
 const HeroSection = ({ scrollY }) => (
   <section role="region" aria-labelledby="hero-heading" className="relative flex flex-col md:flex-row items-center justify-center min-h-screen bg-[#FAF5F0] overflow-hidden pt-2 md:pt-4 pb-12 md:pb-0">
     {/* Organic blob shapes */}
@@ -201,36 +309,18 @@ const HeroSection = ({ scrollY }) => (
           <span className="text-lg font-semibold text-gray-700">4.9/5.0</span>
         </div>
       </div>
-      <p className="text-xl md:text-2xl text-gray-700 font-sans-body max-w-xl text-center md:text-left mb-2" style={{ lineHeight: 1.7 }}>
-        Pure, cold-pressed olive oil for glowing skin and lustrous hair. Deep hydration, natural shine, and healthy confidence from head to toe.
+      <p className="text-xl text-gray-700 text-center md:text-left max-w-xl mb-4">
+        BellaOil delivers radiant, natural beauty with cold-pressed oils and botanical ingredients. For glowing skin and luxurious hair.
       </p>
-      {/* Key benefits list */}
-      <ul className="flex flex-col gap-2 mb-4 w-full max-w-md">
-        <li className="flex items-center gap-3 text-lg text-gray-800 font-sans-body"><FaLeaf className="text-rose-gold-400" /> 100% Natural & Cold-Pressed</li>
-        <li className="flex items-center gap-3 text-lg text-gray-800 font-sans-body"><FaSpa className="text-rose-gold-400" /> Multi-use: Skin & Hair</li>
-        <li className="flex items-center gap-3 text-lg text-gray-800 font-sans-body"><FaSmile className="text-rose-gold-400" /> Dermatologist Approved</li>
-        <li className="flex items-center gap-3 text-lg text-gray-800 font-sans-body"><FaRegGem className="text-rose-gold-400" /> Money-Back Guarantee</li>
-      </ul>
-      <button onClick={() => window.location.href='/products'} className="bg-rose-gold-600 hover:bg-rose-gold-700 text-white px-10 py-4 rounded-full text-xl font-bold shadow-lg transition-all duration-300 font-sans-body w-full max-w-xs mb-2 focus:outline-none focus:ring-4 focus:ring-rose-gold-300">Add to Cart</button>
-      {/* Why Shop With Us row */}
-      <div className="flex flex-wrap justify-center md:justify-start items-center gap-6 mt-4 w-full max-w-xl">
-        <div className="flex flex-col items-center">
-          <FaRegClock className="text-xl text-rose-gold-400 mb-1" />
-          <span className="text-xs font-semibold text-gray-700">Fast Shipping</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FaSpa className="text-xl text-rose-gold-400 mb-1" />
-          <span className="text-xs font-semibold text-gray-700">Clean Ingredients</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FaSmile className="text-xl text-rose-gold-400 mb-1" />
-          <span className="text-xs font-semibold text-gray-700">Dermatologist Approved</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FaLeaf className="text-xl text-rose-gold-400 mb-1" />
-          <span className="text-xs font-semibold text-gray-700">Cruelty-Free</span>
-        </div>
-      </div>
+      <CTAButton 
+        variant="primary" 
+        size="xl" 
+        icon="cart"
+        onClick={() => window.location.href='/products/bella-oil'}
+        className="w-full max-w-xs"
+      >
+        View Product
+      </CTAButton>
     </div>
   </section>
 );
@@ -394,12 +484,11 @@ const GallerySection = () => (
         { image: bOil4, webp: bOil4Webp, alt: "Glowing skin and hair", title: "Lustrous Hair" },
         { image: bOil6, webp: bOil6Webp, alt: "BellaOil lifestyle", title: "Skin & Hair" }
       ].map((item, index) => (
-        <div key={index} className="group relative overflow-hidden rounded-2xl shadow-lg border-4 border-white">
+        <div key={index} className="group relative overflow-hidden rounded-2xl shadow-lg border-4 border-white transition-transform duration-300 hover:-translate-y-2 bg-white">
           <picture>
             <source srcSet={item.webp} type="image/webp" />
-            <img src={item.image} alt={item.alt} loading="lazy" className="w-full h-[384px] object-cover object-center transition-transform duration-500 group-hover:scale-110 levitate" />
+            <img src={item.image} alt={item.alt} loading="lazy" className="w-full h-[384px] object-cover object-center" />
           </picture>
-          
           {/* Overlay with CTA */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
             <div className="p-4 w-full">
@@ -514,7 +603,7 @@ const TestimonialsSection = () => (
         variant="primary" 
         size="lg"
         icon="cart"
-        onClick={() => window.location.href='/products'}
+        onClick={() => window.location.href='/products/bella-oil'}
         className="mx-auto"
       >
         Join Our Happy Customers
@@ -559,7 +648,7 @@ const ShareYourGlowSection = () => (
           variant="secondary" 
           size="md"
           icon="cart"
-          onClick={() => window.location.href='/products'}
+          onClick={() => window.location.href='/products/bella-oil'}
         >
           Shop BellaOil
         </CTAButton>
@@ -582,12 +671,11 @@ const CallToActionSection = () => (
       variant="primary" 
       size="xl" 
       icon="cart"
-      onClick={() => window.location.href='/products'}
+      onClick={() => window.location.href='/products/bella-oil'}
       className="w-full max-w-xs"
     >
       Shop Now
     </CTAButton>
-    <div className="text-rose-gold-600 font-semibold text-center mt-4">Ships within Montenegro</div>
   </section>
 );
 
@@ -598,7 +686,7 @@ const MobileStickyCTA = () => (
       variant="primary" 
       size="lg"
       icon="cart"
-      onClick={() => window.location.href='/products'}
+      onClick={() => window.location.href='/products/bella-oil'}
       className="w-full"
       style={{ boxShadow: '0 4px 24px 0 rgba(0,0,0,0.10)' }}
     >
@@ -747,51 +835,54 @@ const Footer = () => (
   </footer>
 );
 
-// --- APP CONTENT (minimal, airy, image-rich) ---
+// --- APP CONTENT ---
 const AppContent = () => (
-  <Layout>
-    {(scrollY) => (
-      <>
-        <Helmet>
-          <title>BellaOil - Natural Glow for Skin & Hair | Cold-Pressed Luxury Oil</title>
-          <meta name="description" content="BellaOil delivers radiant, natural beauty with cold-pressed oils and botanical ingredients. For glowing skin and luxurious hair. Montenegro delivery available." />
-          <meta property="og:title" content="BellaOil - Natural Glow for Skin & Hair | Cold-Pressed Luxury Oil" />
-          <meta property="og:description" content="BellaOil delivers radiant, natural beauty with cold-pressed oils and botanical ingredients. For glowing skin and luxurious hair. Montenegro delivery available." />
-          <meta property="og:type" content="website" />
-          <meta property="og:url" content="https://bellaoil.onrender.com/" />
-          <meta property="og:image" content="/logo.png" />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="BellaOil - Natural Glow for Skin & Hair | Cold-Pressed Luxury Oil" />
-          <meta name="twitter:description" content="BellaOil delivers radiant, natural beauty with cold-pressed oils and botanical ingredients. For glowing skin and luxurious hair. Montenegro delivery available." />
-          <meta name="twitter:image" content="/logo.png" />
-        </Helmet>
-        <HeroSection scrollY={scrollY} />
-        <IngredientsSection />
-        <EditorialSection
-          image={bOil5}
-          alt="Woman holding BellaOil bottle"
-          title="Beauty & Haircare That Comes Naturally"
-          text="Our journey began with a passion for natural beauty and haircare solutions. We believe the most effective products come from nature's finest ingredients, carefully selected and expertly crafted for both your skin and hair."
-        />
-        <AboutSection />
-        <EditorialSection
-          image={bOil3}
-          alt="BellaOil on minimal background"
-          title="For Glowing Skin & Lustrous Hair"
-          text="Deeply nourishes, hydrates, and protects your skin for a radiant, healthy glow. Strengthens, smooths, and adds shine to your hair—perfect for scalp massages and frizz control."
-          reverse
-        />
-        <GallerySection />
-        <TestimonialsSection />
-        <ShareYourGlowSection />
-        <CallToActionSection />
-        <FAQSection />
-        <Footer />
-        <MobileStickyCTA />
-        <FloatingCTA scrollY={scrollY} />
-      </>
-    )}
-  </Layout>
+  <CartProvider>
+    <Layout>
+      {(scrollY) => (
+        <>
+          <Helmet>
+            <title>BellaOil - Natural Glow for Skin & Hair | Cold-Pressed Luxury Oil</title>
+            <meta name="description" content="BellaOil delivers radiant, natural beauty with cold-pressed oils and botanical ingredients. For glowing skin and luxurious hair. Montenegro delivery available." />
+            <meta property="og:title" content="BellaOil - Natural Glow for Skin & Hair | Cold-Pressed Luxury Oil" />
+            <meta property="og:description" content="BellaOil delivers radiant, natural beauty with cold-pressed oils and botanical ingredients. For glowing skin and luxurious hair. Montenegro delivery available." />
+            <meta property="og:type" content="website" />
+            <meta property="og:url" content="https://bellaoil.onrender.com/" />
+            <meta property="og:image" content="/logo.png" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:title" content="BellaOil - Natural Glow for Skin & Hair | Cold-Pressed Luxury Oil" />
+            <meta name="twitter:description" content="BellaOil delivers radiant, natural beauty with cold-pressed oils and botanical ingredients. For glowing skin and luxurious hair. Montenegro delivery available." />
+            <meta name="twitter:image" content="/logo.png" />
+          </Helmet>
+          <CartModal />
+          <HeroSection scrollY={scrollY} />
+          <IngredientsSection />
+          <EditorialSection
+            image={bOil5}
+            alt="Woman holding BellaOil bottle"
+            title="Beauty & Haircare That Comes Naturally"
+            text="Our journey began with a passion for natural beauty and haircare solutions. We believe the most effective products come from nature's finest ingredients, carefully selected and expertly crafted for both your skin and hair."
+          />
+          <AboutSection />
+          <EditorialSection
+            image={bOil3}
+            alt="BellaOil on minimal background"
+            title="For Glowing Skin & Lustrous Hair"
+            text="Deeply nourishes, hydrates, and protects your skin for a radiant, healthy glow. Strengthens, smooths, and adds shine to your hair—perfect for scalp massages and frizz control."
+            reverse
+          />
+          <GallerySection />
+          <TestimonialsSection />
+          <ShareYourGlowSection />
+          <CallToActionSection />
+          <FAQSection />
+          <Footer />
+          <MobileStickyCTA />
+          <FloatingCTA scrollY={scrollY} />
+        </>
+      )}
+    </Layout>
+  </CartProvider>
 );
 
 const levitateStyle = `
@@ -805,6 +896,7 @@ const levitateStyle = `
 }
 `;
 
+// --- ROUTES ---
 const App = () => (
   <>
     <style>{levitateStyle + `
@@ -816,10 +908,14 @@ const App = () => (
     <Router>
       <Routes>
         <Route path="/" element={<AppContent />} />
-        <Route path="/products" element={<ProductPageWithLayout />} />
+        <Route path="/products/bella-oil" element={<ProductPageWithLayout />} />
+        <Route path="/ingredients" element={<IngredientsPage />} />
+        <Route path="/about" element={<AboutPage />} />
       </Routes>
     </Router>
   </>
 );
+
+export { CartContext, useCart, CartProvider };
 
 export default App;
