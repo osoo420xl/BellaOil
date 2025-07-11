@@ -244,13 +244,13 @@ const IngredientsSection = () => (
     
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {/* Cold-Pressed Olive Oil */}
-      <div className="bg-white rounded-3xl p-8 shadow-lg border border-rose-gold-50">
-        <div className="w-16 h-16 bg-rose-gold-100 rounded-full flex items-center justify-center mb-6">
+      <div className="bg-white rounded-3xl p-8 shadow-lg border border-rose-gold-50 text-center">
+        <h3 className="text-2xl font-serif-head font-bold text-gray-900 mb-4">Cold-Pressed Olive Oil</h3>
+        <div className="w-16 h-16 bg-rose-gold-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <FaLeaf className="text-2xl text-rose-gold-600" />
         </div>
-        <h3 className="text-2xl font-serif-head font-bold text-gray-900 mb-4">Cold-Pressed Olive Oil</h3>
         <p className="text-gray-700 font-sans-body mb-4">Our signature ingredient, rich in antioxidants and essential fatty acids that deeply nourish and protect your skin and hair.</p>
-        <ul className="text-sm text-gray-600 space-y-2">
+        <ul className="text-sm text-gray-600 space-y-2 text-left">
           <li>• Rich in Vitamin E & antioxidants</li>
           <li>• Deep hydration without greasiness</li>
           <li>• Natural anti-inflammatory properties</li>
@@ -258,13 +258,13 @@ const IngredientsSection = () => (
       </div>
       
       {/* Botanical Extracts */}
-      <div className="bg-white rounded-3xl p-8 shadow-lg border border-rose-gold-50">
-        <div className="w-16 h-16 bg-rose-gold-100 rounded-full flex items-center justify-center mb-6">
+      <div className="bg-white rounded-3xl p-8 shadow-lg border border-rose-gold-50 text-center">
+        <h3 className="text-2xl font-serif-head font-bold text-gray-900 mb-4">Botanical Extracts</h3>
+        <div className="w-16 h-16 bg-rose-gold-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <FaSpa className="text-2xl text-rose-gold-600" />
         </div>
-        <h3 className="text-2xl font-serif-head font-bold text-gray-900 mb-4">Botanical Extracts</h3>
         <p className="text-gray-700 font-sans-body mb-4">Carefully selected plant extracts that enhance the natural benefits of olive oil for targeted results.</p>
-        <ul className="text-sm text-gray-600 space-y-2">
+        <ul className="text-sm text-gray-600 space-y-2 text-left">
           <li>• Chamomile for soothing</li>
           <li>• Lavender for calming</li>
           <li>• Rosemary for scalp health</li>
@@ -272,39 +272,17 @@ const IngredientsSection = () => (
       </div>
       
       {/* Natural Preservatives */}
-      <div className="bg-white rounded-3xl p-8 shadow-lg border border-rose-gold-50">
-        <div className="w-16 h-16 bg-rose-gold-100 rounded-full flex items-center justify-center mb-6">
+      <div className="bg-white rounded-3xl p-8 shadow-lg border border-rose-gold-50 text-center">
+        <h3 className="text-2xl font-serif-head font-bold text-gray-900 mb-4">Natural Preservatives</h3>
+        <div className="w-16 h-16 bg-rose-gold-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <FaRegGem className="text-2xl text-rose-gold-600" />
         </div>
-        <h3 className="text-2xl font-serif-head font-bold text-gray-900 mb-4">Natural Preservatives</h3>
         <p className="text-gray-700 font-sans-body mb-4">We use only natural preservatives to maintain freshness while keeping our formula 100% natural and safe.</p>
-        <ul className="text-sm text-gray-600 space-y-2">
+        <ul className="text-sm text-gray-600 space-y-2 text-left">
           <li>• Vitamin E as natural preservative</li>
           <li>• No synthetic chemicals</li>
           <li>• Safe for sensitive skin</li>
         </ul>
-      </div>
-    </div>
-    
-    {/* Trust Badges */}
-    <div className="mt-16 text-center">
-      <div className="flex flex-wrap justify-center items-center gap-8">
-        <div className="flex flex-col items-center">
-          <FaSmile className="text-3xl text-rose-gold-400 mb-2" />
-          <span className="text-sm font-semibold text-gray-700">Dermatologist Approved</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FaLeaf className="text-3xl text-rose-gold-400 mb-2" />
-          <span className="text-sm font-semibold text-gray-700">100% Natural</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FaRegGem className="text-3xl text-rose-gold-400 mb-2" />
-          <span className="text-sm font-semibold text-gray-700">Cruelty-Free</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FaSpa className="text-3xl text-rose-gold-400 mb-2" />
-          <span className="text-sm font-semibold text-gray-700">Vegan</span>
-        </div>
       </div>
     </div>
   </section>
@@ -768,13 +746,13 @@ const AppContent = () => (
       <>
         <HeroSection scrollY={scrollY} />
         <IngredientsSection />
-        <AboutSection />
         <EditorialSection
           image={bOil5}
           alt="Woman holding BellaOil bottle"
           title="Beauty & Haircare That Comes Naturally"
           text="Our journey began with a passion for natural beauty and haircare solutions. We believe the most effective products come from nature's finest ingredients, carefully selected and expertly crafted for both your skin and hair."
         />
+        <AboutSection />
         <EditorialSection
           image={bOil3}
           alt="BellaOil on minimal background"
